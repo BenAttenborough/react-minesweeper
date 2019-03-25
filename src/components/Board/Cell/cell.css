@@ -1,0 +1,17 @@
+.cell {
+	/* border: solid 1px black; */
+	background-color: lightgray;
+	border: solid 2px;
+	border-color: white black black white;
+	/* margin-right: 5px; */
+	/* box-shadow: 5px 5px 0px 0px rgba(0,0,0,0.75); */
+}
+
+.cleared {
+	border-width: 1px;
+	border-color: gray;
+}
+
+.bomb {
+	background-color: red;
+}
