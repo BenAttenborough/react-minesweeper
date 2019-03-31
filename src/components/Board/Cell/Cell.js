@@ -1,25 +1,23 @@
 import React, {useState} from 'react';
 import './cell.css';
 
-const Cell = ({clickFn, revealed, cellNum, bomb, content}) => {
-	// console.log
-	// console.log(`cellNum ${cellNum} bomb: ${bomb} revealed: ${revealed}`)
-	// const [status, setStatus] = useState({cleared: false});
+const Cell = ({clickFn, revealed, cellNum, bomb, content, handleRightClick, flag}) => {
 	const cellClass = ['cell'];
 	if (revealed) {
 		cellClass.push('cleared')
 	};
-	if (bomb) {
+	if (revealed && bomb) {
 		cellClass.push('bomb')
 	}
-	// const clickFn = () => {
-	// 	console.log(`Cell x=${x} y=${y}`);
-	// 	setStatus({cleared: true})
-	// }
+	let cellContent = "";
+	if (revealed && content !== 0) {
+		cellContent = content
+	} else if (!revealed && flag) {
+		cellContent = "F"
+	}
 	return (
-		// <div className={status.cleared ? 'cell cleared' : 'cell'} onClick={clickFn}>
-		<div className={cellClass.join(' ')} onClick={clickFn}>
-			{revealed ? content : ""}
+		<div className={cellClass.join(' ')} onClick={clickFn} onContextMenu={handleRightClick}>
+			{cellContent}
 		</div>
 	)
 }
