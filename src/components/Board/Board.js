@@ -79,42 +79,48 @@ const Board = ({height, width, numBombs}) => {
 						checker(cell.x,cell.y)
 					})
 				} 
+			} else {
+				revealedCells.push({x,y});
 			}
 		}
 		checker(x,y);
 		return revealedCells
 	}
 
-
-
-	
-
-	// const cellChecker = (x,y,count,bomb) => {
-	// 	console.log("count", count)
-	// 	const adjCells = []
-	// 	if (bomb) {
-	// 		console.log("BANG!");
-	// 		setGameState(false);
-	// 		return [{x,y}];
-	// 	}
-	// 	if (count === 0) {
-	// 		console.log("ZERO!")
-	// 		return adjCells;
-	// 	}
-	// 	return [{x,y}];
-	// }
-
 	const clickFn = (x,y) => {
-		// console.log("x", x);
-		// console.log("y", y);
-		// console.log("Data x:" + x + " y: " + y + " = ", data[y][x])
 		const cell = data[y][x];
 		if (cell.bomb) {
 			console.log("BANGG!")
 		} else {
-			console.log(cellCheck(x,y))
+			console.log(cellCheck(x,y));
+			const cellsToReveal=cellCheck(x,y);
+			const dataCopy = data.map((y, yIdx) => {
+				return y.map((x,xIdx) => {
+					if (cellsToReveal.some(cell => cell.x === xIdx && cell.y === yIdx)) {
+						return Object.assign({}, {...x, revealed:true} )
+					} else {
+						return Object.assign({}, x)
+					}
+				})
+			});
+			// data.forEach(y => {
+			// 	console.log("y", y);
+			// 	y.forEach(x => {
+			// 		console.log("x", x)
+			// 	})
+			// })
+			console.log("data", data)
+			console.log("dataCopy", dataCopy)
+			// console.log("dataCopy", dataCopy)
+			// const dataCopy2 = data.map(item => Object.assign({}, item));
+			// cellsToReveal.forEach(item => {
+			// dataCopy2[item.y][item.x] = {revealed: true, ...dataCopy2[item.y][item.x]}
+			// })
+			// console.log("dataCopy", dataCopy)
+			// console.log("dataCopy2", dataCopy2)
+
+			setData(dataCopy)
 		}
-		// console.log("getAdjCells(x,y)", getAdjCells(x,y));
 	}
 
 	return (
