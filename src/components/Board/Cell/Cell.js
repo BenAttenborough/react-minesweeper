@@ -3,7 +3,7 @@ import './cell.css';
 
 const Cell = ({clickFn, revealed, cellNum, bomb, content}) => {
 	// console.log
-	console.log(`cellNum ${cellNum} bomb: ${bomb} revealed: ${revealed}`)
+	// console.log(`cellNum ${cellNum} bomb: ${bomb} revealed: ${revealed}`)
 	// const [status, setStatus] = useState({cleared: false});
 	const cellClass = ['cell'];
 	if (revealed) {

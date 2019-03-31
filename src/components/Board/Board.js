@@ -17,26 +17,22 @@ const Board = ({height, width, numBombs}) => {
 	for (let i = 0; i < numCells; i++) {
 		nums.push(i)
 	};
+
 	for (let i = 0; i < numBombs; i++) {
-		// console.log(`Random number ${i}: ${getRandomInt(nums.length)}`)
 		const randomIdx = getRandomInt(nums.length);
 		bombPositions.push(nums.splice(randomIdx, 1)[0]);
 	}
 
-	console.log("Random bomb positions:", bombPositions)
-
 	for (let y = 0; y < height; y++) {
 		for (let x = 0; x < width; x++) {
-			// row.push(() => <Cell clickFn={cellClickGenerator(x,y)}/>)
-			// console.log("x:", x)
-			// console.log("y:", y)
-			// console.log("Cell number:", (y+x) + (y * (width - 1)))
 			const cellNum = (y+x) + (y * (width - 1));
 			row.push({revealed: false, bomb: bombPositions.includes(cellNum), cellNum})
 		}
 		cells.push(row);
 		row = [];
 	}
+
+	console.log(cells)
 
 	const inBounds = (x,y) => {
 		if (x < 0 || y < 0) {
@@ -48,98 +44,101 @@ const Board = ({height, width, numBombs}) => {
 		return {x,y};
 	}
 
-	const search = (x,y) => {
-		// console.log("search x")
-		// console.log(cells[y][x])
+	const getAdjCells = (x,y) => {
 		let adjCells = [inBounds(x-1, y-1), inBounds(x, y-1), inBounds(x+1, y-1), inBounds(x-1, y), inBounds(x+1, y), inBounds(x-1, y+1), inBounds(x, y+1), inBounds(x+1, y+1)];
-		adjCells = adjCells.filter(cell => cell !== null)
-		let count = 0;
-		adjCells.forEach(cell => {
-			if (cells[cell.y][cell.x].bomb) {
-				count ++;
-			}
-		})
-		// console.log(`There are ${count} bombs adjacent to this cell`);
-		return count;
+		return adjCells.filter(cell => cell !== null)
 	}
 
 	for (let y = 0; y < height; y++) {
 		for (let x = 0; x < width; x++) {
-			cells[y][x].count = search(x,y);
+			const adjCells = getAdjCells(x,y);
+			let count = 0;
+			adjCells.forEach(cell => {
+				if (cells[cell.y][cell.x].bomb) {
+					count ++;
+				}
+			})
+			cells[y][x].count = count;
 		}
 	}
 	
 	const [data, setData] = useState(cells);
+	console.log("data",data)
+	const [gameRunning, setGameState] = useState(true);
 
-	// console.log("Cells:", cells)
+	// cell checking
 
-	const cellClickGenerator = (x,y) => {
-		return function cellClick() {
-			console.log(`Cell x=${x} y=${y}`);
-			setData(state => {
-				const newData = state.map((outer,outerIdx) => {
-					if (y === outerIdx) {
-						return outer.map( (inner, innerIdx) => {
-							if (innerIdx === x) {
-								return () => {return {revealed: true, bomb: false}}
-							} else {
-								return inner
-							}
-						})
-					} else {
-						return outer;
-					}
-					
-				});
-				return newData;
-			})
+	function cellCheck(x,y){
+		const revealedCells = [];
+		function checker(x,y) {
+			const cell = data[y][x];
+			if(cell.count === 0) {
+				if(!revealedCells.some(cell => cell.x === x && cell.y ===y)){
+					revealedCells.push({x,y});
+					getAdjCells(x,y).forEach(cell => {
+						checker(cell.x,cell.y)
+					})
+				} 
+			}
 		}
+		checker(x,y);
+		return revealedCells
 	}
+
+
+
+	
+
+	// const cellChecker = (x,y,count,bomb) => {
+	// 	console.log("count", count)
+	// 	const adjCells = []
+	// 	if (bomb) {
+	// 		console.log("BANG!");
+	// 		setGameState(false);
+	// 		return [{x,y}];
+	// 	}
+	// 	if (count === 0) {
+	// 		console.log("ZERO!")
+	// 		return adjCells;
+	// 	}
+	// 	return [{x,y}];
+	// }
 
 	const clickFn = (x,y) => {
-		console.log(`Cell x(${x}) y(${y}) click`);
-		search(x,y);
-		let adjCells = [inBounds(x-1, y-1), inBounds(x, y-1), inBounds(x+1, y-1), inBounds(x-1, y), inBounds(x, y), inBounds(x+1, y), inBounds(x-1, y+1), inBounds(x, y+1), inBounds(x+1, y+1)]
-		// console.log(`In bounds x ${x}, y ${y}`, inBounds(x,y))
-		adjCells = adjCells.filter(cell => cell !== null)
-		// console.log("Adjacent cells:", adjCells)
-		// console.log("adjCells includes 0,0:", adjCells.some(cell => 
-		// 	cell.x === 0 && cell.y === 0
-		// ))
-
-		// setData(state => {
-		// 	// Replace the cells in adjCells
-
-			const newData = data.map((rows, rowsIdx) => {
-				return rows.map((cell, cellIdx) => {
-					// if (adjCells.some(cell => cell.x === cellIdx && cell.y === rowsIdx)) {
-					if (rowsIdx === y && cellIdx === x) {
-						return {...cell, revealed: true}
-					} else {
-						return cell
-					}
-				});
-			});
-			console.log(newData)
-			setData(newData);
-		
+		// console.log("x", x);
+		// console.log("y", y);
+		// console.log("Data x:" + x + " y: " + y + " = ", data[y][x])
+		const cell = data[y][x];
+		if (cell.bomb) {
+			console.log("BANGG!")
+		} else {
+			console.log(cellCheck(x,y))
+		}
+		// console.log("getAdjCells(x,y)", getAdjCells(x,y));
 	}
 
-	// console.log("DATA >>> ", data)
 	return (
-		<div className='board' style={
+		<div className='app'>
+			<div>
 			{
-				gridTemplateColumns: `repeat(${width}, 25px)`,
-				gridTemplateRows: `repeat(${height}, 25px)`
+				gameRunning ? <p>Running</p> : <p>Game over!</p>
 			}
-			}>
-			{
-				data.map( (rows, y) => 
-					rows.map((item, x) => {
-						return <Cell clickFn={clickFn.bind(null, x, y)} revealed={item.revealed} cellNum={item.cellNum} bomb={item.bomb} content={item.count} />
-					})
-				)
-			}
+			</div>
+			<div className='board' style={
+				{
+					gridTemplateColumns: `repeat(${width}, 25px)`,
+					gridTemplateRows: `repeat(${height}, 25px)`
+				}
+				}>
+				{
+					data.map( (rows, y) => 
+						rows.map((item, x) => {
+							// return <Cell clickFn={clickFn.bind(null, x, y, item.count, item.bomb)} revealed={item.revealed} cellNum={item.cellNum} bomb={item.bomb} content={item.count} />
+							return <Cell clickFn={clickFn.bind(null, x, y)} revealed={item.revealed} cellNum={item.cellNum} bomb={item.bomb} content={item.count} />
+						})
+					)
+				}
+			</div>
 		</div>
 	)
 }
