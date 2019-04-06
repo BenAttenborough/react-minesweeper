@@ -5,6 +5,22 @@ import Cell from './Cell/Cell';
 const Board = ({height, width, numBombs}) => {
 
 	const [gameRunning, setGameState] = useState(true);
+	const [bombs, setBombs] = useState(numBombs);
+
+	const inBounds = (x,y) => {
+		if (x < 0 || y < 0) {
+			return null;
+		}
+		if (x > width - 1 || y > height - 1 ) {
+			return null;
+		} 
+		return {x,y};
+	}
+
+	const getAdjCells = (x,y) => {
+		let adjCells = [inBounds(x-1, y-1), inBounds(x, y-1), inBounds(x+1, y-1), inBounds(x-1, y), inBounds(x+1, y), inBounds(x-1, y+1), inBounds(x, y+1), inBounds(x+1, y+1)];
+		return adjCells.filter(cell => cell !== null)
+	}
 
 	const createBoard = () => {
 		let cells = [];
@@ -29,12 +45,26 @@ const Board = ({height, width, numBombs}) => {
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
 				const cellNum = (y+x) + (y * (width - 1));
+				// console.log("cellNum", cellNum)
 				row.push({revealed: false, bomb: bombPositions.includes(cellNum), cellNum, flag: false})
 			}
 			cells.push(row);
 			row = [];
 		}
-		console.log("Board", cells)
+		// console.log("Board", cells)
+
+		for (let y = 0; y < height; y++) {
+			for (let x = 0; x < width; x++) {
+				const adjCells = getAdjCells(x,y);
+				let count = 0;
+				adjCells.forEach(cell => {
+					if (cells[cell.y][cell.x].bomb) {
+						count ++;
+					}
+				})
+				cells[y][x].count = count;
+			}
+		}
 
 		return cells;
 	}
@@ -45,35 +75,22 @@ const Board = ({height, width, numBombs}) => {
 	console.log(cells)
 
 	const [data, setData] = useState(cells);
-	console.log("data",data)
+	// console.log("data",data)
 
-	const inBounds = (x,y) => {
-		if (x < 0 || y < 0) {
-			return null;
-		}
-		if (x > width - 1 || y > height - 1 ) {
-			return null;
-		} 
-		return {x,y};
-	}
+	
 
-	const getAdjCells = (x,y) => {
-		let adjCells = [inBounds(x-1, y-1), inBounds(x, y-1), inBounds(x+1, y-1), inBounds(x-1, y), inBounds(x+1, y), inBounds(x-1, y+1), inBounds(x, y+1), inBounds(x+1, y+1)];
-		return adjCells.filter(cell => cell !== null)
-	}
-
-	for (let y = 0; y < height; y++) {
-		for (let x = 0; x < width; x++) {
-			const adjCells = getAdjCells(x,y);
-			let count = 0;
-			adjCells.forEach(cell => {
-				if (cells[cell.y][cell.x].bomb) {
-					count ++;
-				}
-			})
-			cells[y][x].count = count;
-		}
-	}
+	// for (let y = 0; y < height; y++) {
+	// 	for (let x = 0; x < width; x++) {
+	// 		const adjCells = getAdjCells(x,y);
+	// 		let count = 0;
+	// 		adjCells.forEach(cell => {
+	// 			if (cells[cell.y][cell.x].bomb) {
+	// 				count ++;
+	// 			}
+	// 		})
+	// 		cells[y][x].count = count;
+	// 	}
+	// }
 
 	// cell checking
 
@@ -122,27 +139,12 @@ const Board = ({height, width, numBombs}) => {
 					}
 				})
 			});
-			// data.forEach(y => {
-			// 	console.log("y", y);
-			// 	y.forEach(x => {
-			// 		console.log("x", x)
-			// 	})
-			// })
-			console.log("data", data)
-			console.log("dataCopy", dataCopy)
-			// console.log("dataCopy", dataCopy)
-			// const dataCopy2 = data.map(item => Object.assign({}, item));
-			// cellsToReveal.forEach(item => {
-			// dataCopy2[item.y][item.x] = {revealed: true, ...dataCopy2[item.y][item.x]}
-			// })
-			// console.log("dataCopy", dataCopy)
-			// console.log("dataCopy2", dataCopy2)
-
 			setData(dataCopy)
 		}
 	}
 
 	const handleRightClick = (x,y,event) => {
+		console.log("event.type", event.type)
 		event.preventDefault()
 		console.log("dd")
 		const dataCopy = data.map((y) => {
@@ -152,12 +154,33 @@ const Board = ({height, width, numBombs}) => {
 		});
 		dataCopy[y][x] = Object.assign({}, {...dataCopy[y][x], flag: !dataCopy[y][x].flag})
 		setData(dataCopy);
+		setBombs(() => {
+			if (bombs > 0 ) {
+				return bombs - 1
+			}
+			return bombs;
+		})
 	};
 
 	const resetGame = () => {
 		const cells = createBoard();
-		setData(cells);
+		console.log("cells", cells)
+		setData(cells,setGameState(true));
 	}
+
+	let numRevealed = 0
+
+	data.forEach(item => {
+		item.reduce( (curr,next) => {
+			if (next.revealed) {
+				return curr + 1;
+			} else {
+				return curr
+			}
+		}, numRevealed )
+	})
+
+	// console.log()
 
 	return (
 		<div className='app'>
@@ -169,7 +192,11 @@ const Board = ({height, width, numBombs}) => {
 			<div onClick={() => {resetGame()}}>
 			<p>Reset</p>
 			</div>
+
+			<p>Bombs: {bombs}</p>
 			
+			<p>Squares revealed: {numRevealed}</p>
+
 			</div>
 			<div className='board' style={
 				{
@@ -180,7 +207,7 @@ const Board = ({height, width, numBombs}) => {
 				{
 					data.map( (rows, y) => 
 						rows.map((item, x) => {
-							return <Cell clickFn={gameRunning ? e => {clickFn(x,y,e)} : null} handleRightClick={event => {handleRightClick(x,y,event)}} revealed={item.revealed} cellNum={item.cellNum} bomb={item.bomb} content={item.bomb ? "X" : item.count} flag={item.flag} />
+							return <Cell clickFn={gameRunning ? e => {clickFn(x,y,e)} : null} handleRightClick={event => {handleRightClick(x,y,event)}} revealed={item.revealed} key={item.cellNum} cellNum={item.cellNum} bomb={item.bomb} content={item.bomb ? "X" : item.count} flag={item.flag} />
 						})
 					)
 				}
