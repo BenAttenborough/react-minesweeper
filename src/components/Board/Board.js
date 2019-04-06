@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import './board.css';
 import Cell from './Cell/Cell';
+// import { styles } from 'ansi-colors';
 
 const Board = ({height, width, numBombs}) => {
 
 	const [gameRunning, setGameState] = useState(true);
-	const [bombs, setBombs] = useState(numBombs);
 
 	const numSquares = height * width;
 
@@ -72,29 +72,7 @@ const Board = ({height, width, numBombs}) => {
 	}
 
 	const cells = createBoard()
-	
-
-	console.log(cells)
-
 	const [data, setData] = useState(cells);
-	// console.log("data",data)
-
-	
-
-	// for (let y = 0; y < height; y++) {
-	// 	for (let x = 0; x < width; x++) {
-	// 		const adjCells = getAdjCells(x,y);
-	// 		let count = 0;
-	// 		adjCells.forEach(cell => {
-	// 			if (cells[cell.y][cell.x].bomb) {
-	// 				count ++;
-	// 			}
-	// 		})
-	// 		cells[y][x].count = count;
-	// 	}
-	// }
-
-	// cell checking
 
 	function cellCheck(x,y){
 		const revealedCells = [];
@@ -156,51 +134,74 @@ const Board = ({height, width, numBombs}) => {
 		});
 		dataCopy[y][x] = Object.assign({}, {...dataCopy[y][x], flag: !dataCopy[y][x].flag})
 		setData(dataCopy);
-		setBombs(() => {
-			if (bombs > 0 ) {
-				return bombs - 1
-			}
-			return bombs;
-		})
+		// setBombs(() => {
+		// 	if (bombs > 0 ) {
+		// 		return bombs - 1
+		// 	}
+		// 	return bombs;
+		// })
 	};
 
 	const resetGame = () => {
 		const cells = createBoard();
-		console.log("cells", cells)
 		setData(cells,setGameState(true));
 	}
 
-	let numRevealed = 0
+	const getNumRevealed = () => {
+		let numRevealed = 0
 
-	data.forEach(item => {
-		numRevealed = item.reduce( (curr,next) => {
-			// console.log("NEXT:", next)
-			if (next.revealed) {
-				return curr + 1;
-			} else {
+		data.forEach(item => {
+			numRevealed = item.reduce( (curr,next) => {
+				if (next.revealed) {
+					return curr + 1;
+				} 
 				return curr
-			}
-		}, numRevealed )
-	})
+				
+			}, numRevealed )
+		})
+		return numRevealed;
+	}
+
+	const getNumFlags = () => {
+		let numFlags = 0
+
+		data.forEach(item => {
+			numFlags = item.reduce( (curr,next) => {
+				if (next.flag) {
+					return curr + 1;
+				} 
+				return curr
+				
+			}, numFlags )
+		})
+		return numFlags;
+	}
+
+	const numRevealed = getNumRevealed();
+
+	const numFlags = getNumFlags();
 
 	// console.log("numRevealed", numRevealed)
 
 	return (
 		<div className='app'>
 			<div>
-			{
-				gameRunning ? <p>Running</p> : numSquares - (numRevealed + numBombs) === 0 ? <p>Win!</p> : <p>Game over!</p>
-			}
+				<div className="announce">
+					{
+						gameRunning ? null : numSquares - (numRevealed + numBombs) === 0 ? <p>Win!</p> : <p>Game over!</p>
+					}
+				</div>
 			
-			<div onClick={() => {resetGame()}}>
-			<p>Reset</p>
+			<div onClick={() => {resetGame()}} className="button">
+			<p>Reset game</p>
 			</div>
 
-			<p>Bombs: {bombs}</p>
+			{/* <p>numFlags: {numFlags}</p> */}
+			<p>Bombs left? {numBombs - numFlags}</p>
 			
 			{
-				numSquares - (numRevealed + numBombs) ?
-				<p>Danger squares left: {numSquares - (numRevealed + numBombs)}</p> : <p>Well done!</p>
+				// numSquares - (numRevealed + numBombs) ?
+				// <p>Danger squares left: {numSquares - (numRevealed + numBombs)}</p> : <p>Well done!</p>
 			}
 			
 

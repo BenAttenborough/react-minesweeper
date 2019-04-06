@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './cell.css';
 
 const Cell = ({clickFn, revealed, cellNum, bomb, content, handleRightClick, flag}) => {
@@ -42,7 +42,6 @@ const Cell = ({clickFn, revealed, cellNum, bomb, content, handleRightClick, flag
 	} else if (!revealed && flag) {
 		cellContent = "F"
 	}
-	console.log("Cell color:", numColour)
 	return (
 		<div className={cellClass.join(' ')} onClick={clickFn} onContextMenu={handleRightClick} style={{color: numColour}}>
 			{cellContent}
