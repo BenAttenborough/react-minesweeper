@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './board.css';
 import Cell from './Cell/Cell';
-// import { styles } from 'ansi-colors';
+import "typeface-vt323";
 
 const Board = ({height, width, numBombs}) => {
 
@@ -124,9 +124,7 @@ const Board = ({height, width, numBombs}) => {
 	}
 
 	const handleRightClick = (x,y,event) => {
-		console.log("event.type", event.type)
 		event.preventDefault()
-		console.log("dd")
 		const dataCopy = data.map((y) => {
 			return y.map((x) => {
 				return Object.assign({}, x)
@@ -134,12 +132,6 @@ const Board = ({height, width, numBombs}) => {
 		});
 		dataCopy[y][x] = Object.assign({}, {...dataCopy[y][x], flag: !dataCopy[y][x].flag})
 		setData(dataCopy);
-		// setBombs(() => {
-		// 	if (bombs > 0 ) {
-		// 		return bombs - 1
-		// 	}
-		// 	return bombs;
-		// })
 	};
 
 	const resetGame = () => {
@@ -191,20 +183,17 @@ const Board = ({height, width, numBombs}) => {
 						gameRunning ? null : numSquares - (numRevealed + numBombs) === 0 ? <p>Win!</p> : <p>Game over!</p>
 					}
 				</div>
-			
-			<div onClick={() => {resetGame()}} className="button">
-			<p>Reset game</p>
-			</div>
 
-			{/* <p>numFlags: {numFlags}</p> */}
-			<p>Bombs left? {numBombs - numFlags}</p>
-			
-			{
-				// numSquares - (numRevealed + numBombs) ?
-				// <p>Danger squares left: {numSquares - (numRevealed + numBombs)}</p> : <p>Well done!</p>
-			}
+				<div className="controlContainer">
+					<p className="numberBox">000</p>
+					<div onClick={() => {resetGame()}} className="button">
+						<p>Reset game</p>
+					</div>
+					<p className="numberBox">{numBombs - numFlags}</p>
+				</div>
 			
 
+		
 			</div>
 			<div className='board' style={
 				{

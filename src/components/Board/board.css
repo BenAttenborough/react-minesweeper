@@ -1,9 +1,29 @@
-.board {
+html {
+	margin: 0;
+	background-color: lightgray;
+}
+
+.app {
 	border: 2px solid;
 	border-color: white black black white;
+	background-color: lightgray;
+	padding: 6px;
+}
+
+.board {
+	border: 2px solid;
+	border-color: black white white black;
 	display: grid;
-	/* grid-template-columns: repeat(3, 25px); */
-	/* grid-template-rows: repeat(3, 25px); */
+}
+
+.controlContainer {
+	/* height: 2rem; */
+	border: 2px solid;
+	border-color: white black black white;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 5px; 
+	padding: 1rem;
 }
 
 .button {
@@ -11,7 +31,8 @@
 	padding: 0.5rem;
 	border: 1px solid rgb(48, 48, 250);
 	border-radius: 10px;
-	display: inline-block;
+	/* display: inline-block; */
+	margin: 0;
 }
 
 .button p {
@@ -23,4 +44,14 @@
 .announce {
 	font-weight: bold;
 	color: red;
+}
+
+.numberBox {
+	font-family: 'vt323', monospace;
+	font-size: 2rem;
+	color: red;
+	background-color: black;
+	margin: 0;
+	/* display: inline-block; */
+	padding: 0.25rem 0.5rem;
 }
