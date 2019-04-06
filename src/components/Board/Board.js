@@ -7,6 +7,8 @@ const Board = ({height, width, numBombs}) => {
 	const [gameRunning, setGameState] = useState(true);
 	const [bombs, setBombs] = useState(numBombs);
 
+	const numSquares = height * width;
+
 	const inBounds = (x,y) => {
 		if (x < 0 || y < 0) {
 			return null;
@@ -171,7 +173,8 @@ const Board = ({height, width, numBombs}) => {
 	let numRevealed = 0
 
 	data.forEach(item => {
-		item.reduce( (curr,next) => {
+		numRevealed = item.reduce( (curr,next) => {
+			// console.log("NEXT:", next)
 			if (next.revealed) {
 				return curr + 1;
 			} else {
@@ -180,13 +183,13 @@ const Board = ({height, width, numBombs}) => {
 		}, numRevealed )
 	})
 
-	// console.log()
+	// console.log("numRevealed", numRevealed)
 
 	return (
 		<div className='app'>
 			<div>
 			{
-				gameRunning ? <p>Running</p> : <p>Game over!</p>
+				gameRunning ? <p>Running</p> : numSquares - (numRevealed + numBombs) === 0 ? <p>Win!</p> : <p>Game over!</p>
 			}
 			
 			<div onClick={() => {resetGame()}}>
@@ -195,7 +198,11 @@ const Board = ({height, width, numBombs}) => {
 
 			<p>Bombs: {bombs}</p>
 			
-			<p>Squares revealed: {numRevealed}</p>
+			{
+				numSquares - (numRevealed + numBombs) ?
+				<p>Danger squares left: {numSquares - (numRevealed + numBombs)}</p> : <p>Well done!</p>
+			}
+			
 
 			</div>
 			<div className='board' style={
