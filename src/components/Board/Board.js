@@ -1,9 +1,13 @@
 import React, {useState} from 'react';
 import './board.css';
 import Cell from './Cell/Cell';
+import Counter from '../Counter/Counter';
 import "typeface-vt323";
+import smiley from "../../img/Smiley.png"
+import smileyOh from "../../img/SmileyOh.png"
+import smileyHit from "../../img/SmileyHit.png"
 
-const Board = ({height, width, numBombs}) => {
+const Board = ({height, width, numBombs, type}) => {
 
 	const [gameRunning, setGameState] = useState(true);
 
@@ -21,6 +25,13 @@ const Board = ({height, width, numBombs}) => {
 
 	const getAdjCells = (x,y) => {
 		let adjCells = [inBounds(x-1, y-1), inBounds(x, y-1), inBounds(x+1, y-1), inBounds(x-1, y), inBounds(x+1, y), inBounds(x-1, y+1), inBounds(x, y+1), inBounds(x+1, y+1)];
+		if (type === "HEX") {
+			if ( y % 2 == 0) {
+				adjCells = [inBounds(x, y-1), inBounds(x+1, y-1), inBounds(x-1, y), inBounds(x+1, y), inBounds(x, y+1), inBounds(x+1, y+1)];
+			} else {
+				adjCells = [inBounds(x-1, y-1), inBounds(x, y-1), inBounds(x-1, y), inBounds(x+1, y), inBounds(x-1, y+1), inBounds(x, y+1)];
+			}
+		}
 		return adjCells.filter(cell => cell !== null)
 	}
 
@@ -53,7 +64,7 @@ const Board = ({height, width, numBombs}) => {
 			cells.push(row);
 			row = [];
 		}
-		// console.log("Board", cells)
+		console.log("Board", cells)
 
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
@@ -96,6 +107,9 @@ const Board = ({height, width, numBombs}) => {
 	const clickFn = (x,y,e) => {
 		e.preventDefault()
 		console.log("click type", e.type)
+		if (!gameRunning) {
+			setGameState(true)
+		}
 		const cell = data[y][x];
 		if (cell.bomb) {
 			console.log("BANGG!");
@@ -175,40 +189,64 @@ const Board = ({height, width, numBombs}) => {
 
 	// console.log("numRevealed", numRevealed)
 
+	let templateCols = ``;
+
+	switch(type) {
+		case "HEX":
+			templateCols = `repeat(${(width * 2) + 1}, 10px)`;
+			break;
+		default:
+			templateCols = `repeat(${width * 2}, 10px)`;
+	}
+
+	let offset = false;
+
 	return (
 		<div className='app'>
 			<div>
-				<div className="announce">
+				<div className="controlContainer">
+					{/* <Counter className="numberBox" start={gameRunning} /> */}
+					<div onClick={() => {resetGame()}} className="button">
+						{
+							gameRunning ? <img src={smiley} alt="Reset game" /> : <img src={smileyHit} alt="Reset game" />
+						}
+					</div>
+					<p className="numberBox">{numBombs - numFlags}</p>
+				</div>
+			</div>
+			<div className='board' style={
+				{
+					gridTemplateColumns: templateCols,
+					gridTemplateRows: `repeat(${height}, 20px)`
+				}
+				}>
+				{
+					data.map( (rows, y) => {
+						return rows.map((item, x) => {
+							if (type === "HEX") {
+								if (y % 2 === 0 && x === 0) {
+									offset = true;
+									return [<div style={{gridColumnEnd: "span " + 1}}></div>,<Cell clickFn={gameRunning ? e => {clickFn(x,y,e)} : null} handleRightClick={event => {handleRightClick(x,y,event)}} revealed={item.revealed} key={item.cellNum} cellNum={item.cellNum} bomb={item.bomb} content={item.bomb ? "X" : item.count} flag={item.flag} offset={true} />]
+								}
+								if ( y % 2 !== 0 && x === 14) {
+									offset = false;
+									return [<Cell clickFn={gameRunning ? e => {clickFn(x,y,e)} : null} handleRightClick={event => {handleRightClick(x,y,event)}} revealed={item.revealed} key={item.cellNum} cellNum={item.cellNum} bomb={item.bomb} content={item.bomb ? "X" : item.count} flag={item.flag} offset={false}/>, <div style={{gridColumnEnd: "span " + 1}}></div>]
+								}
+								if (y % 2 !== 0) {
+									offset = false;
+								}
+							}
+							return <Cell clickFn={gameRunning ? e => {clickFn(x,y,e)} : null} handleRightClick={event => {handleRightClick(x,y,event)}} revealed={item.revealed} key={item.cellNum} cellNum={item.cellNum} bomb={item.bomb} content={item.bomb ? "X" : item.count} flag={item.flag} offset={offset} />
+						})
+						}
+					)
+				}
+			</div>
+			<div className="announce">
 					{
 						gameRunning ? null : numSquares - (numRevealed + numBombs) === 0 ? <p>Win!</p> : <p>Game over!</p>
 					}
 				</div>
-
-				<div className="controlContainer">
-					<p className="numberBox">000</p>
-					<div onClick={() => {resetGame()}} className="button">
-						<p>Reset game</p>
-					</div>
-					<p className="numberBox">{numBombs - numFlags}</p>
-				</div>
-			
-
-		
-			</div>
-			<div className='board' style={
-				{
-					gridTemplateColumns: `repeat(${width}, 25px)`,
-					gridTemplateRows: `repeat(${height}, 25px)`
-				}
-				}>
-				{
-					data.map( (rows, y) => 
-						rows.map((item, x) => {
-							return <Cell clickFn={gameRunning ? e => {clickFn(x,y,e)} : null} handleRightClick={event => {handleRightClick(x,y,event)}} revealed={item.revealed} key={item.cellNum} cellNum={item.cellNum} bomb={item.bomb} content={item.bomb ? "X" : item.count} flag={item.flag} />
-						})
-					)
-				}
-			</div>
 		</div>
 	)
 }

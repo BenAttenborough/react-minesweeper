@@ -3,6 +3,7 @@
 	border: solid 2px;
 	border-color: white black black white;
 	font-weight: bold;
+	grid-column-end: span 2;
 }
 
 .cleared {

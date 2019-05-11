@@ -17,7 +17,6 @@ html {
 }
 
 .controlContainer {
-	/* height: 2rem; */
 	border: 2px solid;
 	border-color: white black black white;
 	display: flex;
@@ -27,18 +26,16 @@ html {
 }
 
 .button {
-	background-color: rgb(48, 48, 250);
-	padding: 0.5rem;
-	border: 1px solid rgb(48, 48, 250);
-	border-radius: 10px;
-	/* display: inline-block; */
+	border: 2px solid;
+	border-color: white black black white;
+	padding: 3px;
 	margin: 0;
+	height: 2rem;
+	width: 2rem;
 }
 
-.button p {
-	margin: 0;
-	color: white;
-	font-weight: bold;
+.button img {
+	width: 100%
 }
 
 .announce {
@@ -54,4 +51,5 @@ html {
 	margin: 0;
 	/* display: inline-block; */
 	padding: 0.25rem 0.5rem;
+	width: 3rem;
 }

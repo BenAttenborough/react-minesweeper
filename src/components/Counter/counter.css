@@ -1,0 +1,10 @@
+.numberBox {
+	font-family: 'vt323', monospace;
+	font-size: 2rem;
+	color: red;
+	background-color: black;
+	margin: 0;
+	/* display: inline-block; */
+	padding: 0.25rem 0.5rem;
+	width: 3rem;
+}
