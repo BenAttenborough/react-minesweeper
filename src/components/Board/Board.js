@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './board.css';
 import Cell from './Cell/Cell';
 import Counter from '../Counter/Counter';
@@ -8,6 +8,9 @@ import smileyOh from "../../img/SmileyOh.png"
 import smileyHit from "../../img/SmileyHit.png"
 
 const Board = ({height, width, numBombs, type}) => {
+
+	// canvas must be declared here so the ref can refer to it
+	let canvasRef = React.useRef(null);
 
 	const [gameRunning, setGameState] = useState(true);
 
@@ -201,6 +204,97 @@ const Board = ({height, width, numBombs, type}) => {
 
 	let offset = false;
 
+	function getCursorPosition(canvas, event) {
+		var rect = canvas.getBoundingClientRect();
+		var x = event.clientX - rect.left;
+		var y = event.clientY - rect.top;
+		console.log("x: " + x + " y: " + y);
+
+		console.log("x:", Math.floor( x / 20 ))
+		console.log("y:", Math.floor( y / 20 ))
+		return {x: Math.floor( x / 20 ),y: Math.floor( y / 20 )}
+	}
+
+	useEffect(()=>{
+		console.log("UPDATING COMPONENT");
+		console.log("data", data);
+
+		const numRows = data.length;
+		const numCols = data[0].length
+
+		const canvas = canvasRef.current
+		const ctx = canvas.getContext('2d')
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		
+		// Drawing squares
+		function drawSquare(width, offSetX, offSetY, item) {
+			const effectiveWidth = width -2;
+			let content = "";
+			if (item.bomb) {
+				content = "X"
+			} else {
+				content = item.count || "";
+			}
+			ctx.strokeStyle = item.revealed ? 'black' : 'white';
+			ctx.beginPath();
+			ctx.moveTo(offSetX, offSetY);
+			ctx.lineTo(effectiveWidth + offSetX, offSetY);
+			ctx.stroke();
+			ctx.strokeStyle = item.revealed ? 'white' : 'black';
+			ctx.beginPath();
+			ctx.moveTo(effectiveWidth + offSetX, offSetY);
+			ctx.lineTo(effectiveWidth + offSetX, effectiveWidth + offSetY);
+			ctx.lineTo(offSetX, effectiveWidth + offSetY);
+			ctx.stroke();
+			ctx.strokeStyle = item.revealed ? 'black' : 'white';
+			ctx.beginPath();
+			ctx.moveTo(offSetX, effectiveWidth + offSetY);
+			ctx.lineTo(offSetX, offSetY);
+			ctx.stroke();
+			if (item.revealed) {
+				ctx.fillStyle = 'black';
+				ctx.font = '16px sans-serif';
+				ctx.fillText(content, offSetX + 4, offSetY + width - 5);
+				if (item.bomb) {
+					ctx.beginPath();
+					ctx.strokeStyle = 'rgb(1, 1, 1)';
+					ctx.fillStyle = 'red';
+					ctx.moveTo(offSetX, offSetY);
+					ctx.lineTo(effectiveWidth + offSetX, offSetY);
+					ctx.lineTo(effectiveWidth + offSetX, effectiveWidth + offSetY);
+					ctx.lineTo(offSetX, effectiveWidth + offSetY);
+					ctx.lineTo(offSetX, offSetY);
+					ctx.fill()
+				}
+			}
+			
+
+		}
+
+		function drawRow(numSquares, width, offsetX, offsetY, colour) {
+			for (let i = 0; i < numSquares; i++) {
+				drawSquare(width, offsetX + ((width + 1) * i), offsetY, colour)
+			}
+		}
+
+		function drawGrid(rows, cols, width, offsetX, offsetY) {
+			for (let i = 0; i < rows; i++) {
+				drawRow(cols, width, offsetX, offsetY + ((width + 1) * i), 'orange')
+			}
+		}
+
+		// drawGrid(numRows, numCols, 20, 1, 1)
+
+		const inset = 1
+
+		data.map( (rows, y) => {
+			return rows.map((item, x) => {
+				drawSquare(20,(width * y) + inset, (width * x) + inset, item)
+			})
+		})
+
+	})
+
 	return (
 		<div className='app'>
 			<div>
@@ -214,7 +308,24 @@ const Board = ({height, width, numBombs, type}) => {
 					<p className="numberBox">{numBombs - numFlags}</p>
 				</div>
 			</div>
-			<div className='board' style={
+			<canvas ref={canvasRef} width={width * 20} height={height * 20} className='board' onClick={ event =>{
+				console.log("Canvas clicked");
+				const {x,y} = getCursorPosition(canvasRef.current, event)
+				console.log("x:", x)
+				console.log("y:", y)
+				clickFn(y,x,event)
+				// const canvas = canvasRef.current
+				// const ctx = canvas.getContext('2d')
+				// ctx.strokeStyle = 'rgb(0, 0, 0)';
+				// ctx.beginPath();
+				// ctx.moveTo(10,0);
+				// ctx.lineTo(20,10);
+				// ctx.lineTo(10,20);
+				// ctx.lineTo(0,10);
+				// ctx.lineTo(10,0);
+				// ctx.stroke();
+			}}/>
+			{/* <div className='board' style={
 				{
 					gridTemplateColumns: templateCols,
 					gridTemplateRows: `repeat(${height}, 20px)`
@@ -241,7 +352,7 @@ const Board = ({height, width, numBombs, type}) => {
 						}
 					)
 				}
-			</div>
+			</div> */}
 			<div className="announce">
 					{
 						gameRunning ? null : numSquares - (numRevealed + numBombs) === 0 ? <p>Win!</p> : <p>Game over!</p>
