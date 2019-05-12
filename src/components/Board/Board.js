@@ -13,6 +13,7 @@ const Board = ({height, width, numBombs, type}) => {
 	let canvasRef = React.useRef(null);
 
 	const [gameRunning, setGameState] = useState(true);
+	const [clickCords, setClickCords] = useState(null);
 
 	const numSquares = height * width;
 
@@ -58,27 +59,27 @@ const Board = ({height, width, numBombs, type}) => {
 			bombPositions.push(nums.splice(randomIdx, 1)[0]);
 		}
 	
-		for (let y = 0; y < height; y++) {
-			for (let x = 0; x < width; x++) {
-				const cellNum = (y+x) + (y * (width - 1));
+		for (let x = 0; x < height; x++) {
+			for (let y = 0; y < width; y++) {
+				const cellNum = (x+y) + (x * (width - 1));
 				// console.log("cellNum", cellNum)
-				row.push({revealed: false, bomb: bombPositions.includes(cellNum), cellNum, flag: false})
+				row.push({revealed: false, bomb: bombPositions.includes(cellNum), cellNum, flag: false, x, y})
 			}
 			cells.push(row);
 			row = [];
 		}
 		console.log("Board", cells)
 
-		for (let y = 0; y < height; y++) {
-			for (let x = 0; x < width; x++) {
-				const adjCells = getAdjCells(x,y);
+		for (let x = 0; x < height; x++) {
+			for (let y = 0; y < width; y++) {
+				const adjCells = getAdjCells(y,x);
 				let count = 0;
 				adjCells.forEach(cell => {
-					if (cells[cell.y][cell.x].bomb) {
+					if (cells[cell.x][cell.y].bomb) {
 						count ++;
 					}
 				})
-				cells[y][x].count = count;
+				cells[x][y].count = count;
 			}
 		}
 
@@ -216,8 +217,12 @@ const Board = ({height, width, numBombs, type}) => {
 	}
 
 	useEffect(()=>{
+		// clickCords
+		// setClickCords
 		console.log("UPDATING COMPONENT");
 		console.log("data", data);
+
+		console.log('clickCords', clickCords)
 
 		const numRows = data.length;
 		const numCols = data[0].length
@@ -267,7 +272,32 @@ const Board = ({height, width, numBombs, type}) => {
 					ctx.fill()
 				}
 			}
-			
+		}
+
+		function drawBasicSq(width, offSetX, offSetY, item) {
+			// console.log('item', item)
+			const effectiveWidth = width -2;
+			let content = "";
+			if (item.bomb) {
+				content = "X"
+			} else {
+				content = item.count || "";
+			}
+			ctx.beginPath();
+					ctx.strokeStyle = 'rgb(1, 1, 1)';
+					ctx.fillStyle = 'red';
+					ctx.moveTo(offSetX, offSetY);
+					ctx.lineTo(effectiveWidth + offSetX, offSetY);
+					ctx.lineTo(effectiveWidth + offSetX, effectiveWidth + offSetY);
+					ctx.lineTo(offSetX, effectiveWidth + offSetY);
+					// ctx.lineTo(offSetX, offSetY);
+					ctx.closePath()
+					if (clickCords && ctx.isPointInPath(clickCords.x, clickCords.y)) {
+						// ctx.fillStyle = 'green';
+						console.log(`x: ${item.x}, y: ${item.y} clicked`)
+						// clickFn()
+					}
+					ctx.fill()
 
 		}
 
@@ -289,7 +319,7 @@ const Board = ({height, width, numBombs, type}) => {
 
 		data.map( (rows, y) => {
 			return rows.map((item, x) => {
-				drawSquare(20,(width * y) + inset, (width * x) + inset, item)
+				drawBasicSq(20,(width * y) + inset, (width * x) + inset, item)
 			})
 		})
 
@@ -313,7 +343,12 @@ const Board = ({height, width, numBombs, type}) => {
 				const {x,y} = getCursorPosition(canvasRef.current, event)
 				console.log("x:", x)
 				console.log("y:", y)
-				clickFn(y,x,event)
+				// clickFn(y,x,event)
+				var rect = canvasRef.current.getBoundingClientRect();
+				var rawX = event.clientX - rect.left;
+				var rawY = event.clientY - rect.top;
+
+				setClickCords({x:rawX,y:rawY})
 				// const canvas = canvasRef.current
 				// const ctx = canvas.getContext('2d')
 				// ctx.strokeStyle = 'rgb(0, 0, 0)';
