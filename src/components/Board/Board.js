@@ -175,18 +175,29 @@ const Board = ({ height, width, numBombs, type }) => {
         }
     };
 
-    const handleRightClick = (x, y, event) => {
+    const handleRightClick = event => {
         event.preventDefault();
-        const dataCopy = data.map(y => {
-            return y.map(x => {
-                return Object.assign({}, x);
-            });
-        });
-        dataCopy[y][x] = Object.assign(
-            {},
-            { ...dataCopy[y][x], flag: !dataCopy[y][x].flag }
-        );
-        setData(dataCopy);
+        console.log("Right clicked pressed!");
+
+        const { x, y } = getCursorPosition(canvasRef.current, event);
+        // console.log("x:", x);
+        // console.log("y:", y);
+        var rect = canvasRef.current.getBoundingClientRect();
+        var rawX = event.clientX - rect.left;
+        var rawY = event.clientY - rect.top;
+
+        setClickCords({ x: rawX, y: rawY, clickType: "RIGHT" });
+
+        // const dataCopy = data.map(y => {
+        //     return y.map(x => {
+        //         return Object.assign({}, x);
+        //     });
+        // });
+        // dataCopy[y][x] = Object.assign(
+        //     {},
+        //     { ...dataCopy[y][x], flag: !dataCopy[y][x].flag }
+        // );
+        // setData(dataCopy);
     };
 
     const resetGame = () => {
@@ -350,15 +361,38 @@ const Board = ({ height, width, numBombs, type }) => {
             ctx.lineTo(offsetX, offsetY + width / 2);
             ctx.closePath();
             if (clickCords && ctx.isPointInPath(clickCords.x, clickCords.y)) {
-                // ctx.fillStyle = 'green';
-                console.log(`x: ${item.x}, y: ${item.y} clicked`);
-                console.log("data", data);
-                console.log("data[item.x][item.y]", data[item.x][item.y]);
-                const clickedCell = data[item.x][item.y];
-                if (!clickedCell.revealed) {
-                    console.log(`x: ${item.x}, y: ${item.y} not revealed`);
-                    setClickCords(null);
-                    updateGrid(item.x, item.y);
+                if (clickCords.clickType === "LEFT") {
+                    // ctx.fillStyle = 'green';
+                    console.log(`x: ${item.x}, y: ${item.y} clicked`);
+                    console.log("data", data);
+                    console.log("data[item.x][item.y]", data[item.x][item.y]);
+                    const clickedCell = data[item.x][item.y];
+                    if (!clickedCell.revealed) {
+                        console.log(`x: ${item.x}, y: ${item.y} not revealed`);
+                        setClickCords(null);
+                        updateGrid(item.x, item.y);
+                    }
+                } else if (clickCords.clickType === "RIGHT") {
+                    console.log("Handle right click transform here");
+                    const clickedCell = data[item.x][item.y];
+                    if (!clickedCell.revealed) {
+                        console.log(`x: ${item.x}, y: ${item.y} not revealed`);
+                        setClickCords(null);
+                        // updateGrid(item.x, item.y);
+                        const dataCopy = data.map(x => {
+                            return x.map(y => {
+                                return Object.assign({}, y);
+                            });
+                        });
+                        dataCopy[item.x][item.y] = Object.assign(
+                            {},
+                            {
+                                ...dataCopy[item.x][item.y],
+                                flag: !dataCopy[item.x][item.y].flag
+                            }
+                        );
+                        setData(dataCopy);
+                    }
                 }
             }
             ctx.fill();
@@ -366,6 +400,10 @@ const Board = ({ height, width, numBombs, type }) => {
                 ctx.fillStyle = "black";
                 ctx.font = "16px sans-serif";
                 ctx.fillText(content, offsetX + 4, offsetY + width);
+            } else if (item.flag) {
+                ctx.fillStyle = "black";
+                ctx.font = "16px sans-serif";
+                ctx.fillText("F", offsetX + 4, offsetY + width);
             }
         }
 
@@ -429,8 +467,11 @@ const Board = ({ height, width, numBombs, type }) => {
                     var rawX = event.clientX - rect.left;
                     var rawY = event.clientY - rect.top;
 
-                    setClickCords({ x: rawX, y: rawY });
+                    setClickCords({ x: rawX, y: rawY, clickType: "LEFT" });
                     // handleCanvasClick(event);
+                }}
+                onContextMenu={event => {
+                    handleRightClick(event);
                 }}
             />
             <div className="announce">
