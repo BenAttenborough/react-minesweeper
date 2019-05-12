@@ -444,7 +444,9 @@ const Board = ({ height, width, numBombs, type }) => {
                 height={height * 20}
                 className="board"
                 onClick={event => {
+                    event.preventDefault();
                     console.log("Canvas clicked");
+                    console.log("Event type:", event.type);
                     const { x, y } = getCursorPosition(
                         canvasRef.current,
                         event
