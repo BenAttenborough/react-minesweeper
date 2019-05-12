@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./board.css";
-import Cell from "./Cell/Cell";
 import Counter from "../Counter/Counter";
 import "typeface-vt323";
 import smiley from "../../img/Smiley.png";
-import smileyOh from "../../img/SmileyOh.png";
 import smileyHit from "../../img/SmileyHit.png";
 
 const Board = ({ height, width, numBombs, type }) => {
@@ -13,7 +11,6 @@ const Board = ({ height, width, numBombs, type }) => {
 
     const [gameRunning, setGameState] = useState(true);
     const [clickCords, setClickCords] = useState(null);
-
     const numSquares = height * width;
 
     const inBounds = (x, y) => {
@@ -137,7 +134,7 @@ const Board = ({ height, width, numBombs, type }) => {
         return revealedCells;
     }
 
-    const clickFn = (x, y, e) => {
+    const updateGrid = (x, y) => {
         // e.preventDefault()
         // console.log("click type", e.type)
         if (!gameRunning) {
@@ -229,20 +226,6 @@ const Board = ({ height, width, numBombs, type }) => {
 
     const numFlags = getNumFlags();
 
-    // console.log("numRevealed", numRevealed)
-
-    let templateCols = "";
-
-    switch (type) {
-        case "HEX":
-            templateCols = `repeat(${width * 2 + 1}, 10px)`;
-            break;
-        default:
-            templateCols = `repeat(${width * 2}, 10px)`;
-    }
-
-    let offset = false;
-
     function getCursorPosition(canvas, event) {
         var rect = canvas.getBoundingClientRect();
         var x = event.clientX - rect.left;
@@ -252,6 +235,12 @@ const Board = ({ height, width, numBombs, type }) => {
         console.log("x:", Math.floor(x / 20));
         console.log("y:", Math.floor(y / 20));
         return { x: Math.floor(x / 20), y: Math.floor(y / 20) };
+    }
+
+    function handleCanvasClick(event) {
+        event.preventDefault();
+        console.log("Canvas clicked");
+        console.log(event.type);
     }
 
     useEffect(() => {
@@ -297,11 +286,10 @@ const Board = ({ height, width, numBombs, type }) => {
                 console.log("data", data);
                 console.log("data[item.x][item.y]", data[item.x][item.y]);
                 const clickedCell = data[item.x][item.y];
-                // clickFn(item.x, item.y)
                 if (!clickedCell.revealed) {
                     console.log(`x: ${item.x}, y: ${item.y} not revealed`);
                     setClickCords(null);
-                    clickFn(item.x, item.y);
+                    updateGrid(item.x, item.y);
                 }
             }
             ctx.fill();
@@ -367,11 +355,10 @@ const Board = ({ height, width, numBombs, type }) => {
                 console.log("data", data);
                 console.log("data[item.x][item.y]", data[item.x][item.y]);
                 const clickedCell = data[item.x][item.y];
-                // clickFn(item.x, item.y)
                 if (!clickedCell.revealed) {
                     console.log(`x: ${item.x}, y: ${item.y} not revealed`);
                     setClickCords(null);
-                    clickFn(item.x, item.y);
+                    updateGrid(item.x, item.y);
                 }
             }
             ctx.fill();
@@ -379,20 +366,6 @@ const Board = ({ height, width, numBombs, type }) => {
                 ctx.fillStyle = "black";
                 ctx.font = "16px sans-serif";
                 ctx.fillText(content, offsetX + 4, offsetY + width);
-                // if (item.bomb) {
-                //     ctx.beginPath();
-                //     ctx.strokeStyle = "rgb(1, 1, 1)";
-                //     ctx.fillStyle = "red";
-                //     ctx.moveTo(offSetX, offSetY);
-                //     ctx.lineTo(effectiveWidth + offSetX, offSetY);
-                //     ctx.lineTo(
-                //         effectiveWidth + offSetX,
-                //         effectiveWidth + offSetY
-                //     );
-                //     ctx.lineTo(offSetX, effectiveWidth + offSetY);
-                //     ctx.lineTo(offSetX, offSetY);
-                //     ctx.fill();
-                // }
             }
         }
 
@@ -422,7 +395,6 @@ const Board = ({ height, width, numBombs, type }) => {
         <div className="app">
             <div>
                 <div className="controlContainer">
-                    {/* <Counter className="numberBox" start={gameRunning} /> */}
                     <div
                         onClick={() => {
                             resetGame();
@@ -453,52 +425,14 @@ const Board = ({ height, width, numBombs, type }) => {
                     );
                     console.log("x:", x);
                     console.log("y:", y);
-                    // clickFn(y,x,event)
                     var rect = canvasRef.current.getBoundingClientRect();
                     var rawX = event.clientX - rect.left;
                     var rawY = event.clientY - rect.top;
 
                     setClickCords({ x: rawX, y: rawY });
-                    // const canvas = canvasRef.current
-                    // const ctx = canvas.getContext('2d')
-                    // ctx.strokeStyle = 'rgb(0, 0, 0)';
-                    // ctx.beginPath();
-                    // ctx.moveTo(10,0);
-                    // ctx.lineTo(20,10);
-                    // ctx.lineTo(10,20);
-                    // ctx.lineTo(0,10);
-                    // ctx.lineTo(10,0);
-                    // ctx.stroke();
+                    // handleCanvasClick(event);
                 }}
             />
-            {/* <div className='board' style={
-				{
-					gridTemplateColumns: templateCols,
-					gridTemplateRows: `repeat(${height}, 20px)`
-				}
-				}>
-				{
-					data.map( (rows, y) => {
-						return rows.map((item, x) => {
-							if (type === "HEX") {
-								if (y % 2 === 0 && x === 0) {
-									offset = true;
-									return [<div style={{gridColumnEnd: "span " + 1}}></div>,<Cell clickFn={gameRunning ? e => {clickFn(x,y,e)} : null} handleRightClick={event => {handleRightClick(x,y,event)}} revealed={item.revealed} key={item.cellNum} cellNum={item.cellNum} bomb={item.bomb} content={item.bomb ? "X" : item.count} flag={item.flag} offset={true} />]
-								}
-								if ( y % 2 !== 0 && x === 14) {
-									offset = false;
-									return [<Cell clickFn={gameRunning ? e => {clickFn(x,y,e)} : null} handleRightClick={event => {handleRightClick(x,y,event)}} revealed={item.revealed} key={item.cellNum} cellNum={item.cellNum} bomb={item.bomb} content={item.bomb ? "X" : item.count} flag={item.flag} offset={false}/>, <div style={{gridColumnEnd: "span " + 1}}></div>]
-								}
-								if (y % 2 !== 0) {
-									offset = false;
-								}
-							}
-							return <Cell clickFn={gameRunning ? e => {clickFn(x,y,e)} : null} handleRightClick={event => {handleRightClick(x,y,event)}} revealed={item.revealed} key={item.cellNum} cellNum={item.cellNum} bomb={item.bomb} content={item.bomb ? "X" : item.count} flag={item.flag} offset={offset} />
-						})
-						}
-					)
-				}
-			</div> */}
             <div className="announce">
                 {gameRunning ? null : numSquares - (numRevealed + numBombs) ===
                   0 ? (
