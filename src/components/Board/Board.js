@@ -350,8 +350,9 @@ const Board = ({ height, width, numBombs, type }) => {
                 content = item.count || "";
             }
             ctx.fillStyle = item.revealed
-                ? "rgb(182, 182, 182)"
+                ? "rgb(212, 212, 212)"
                 : "rgb(152, 152, 152)";
+
             ctx.beginPath();
             ctx.moveTo(offsetX + width / 2, offsetY);
             ctx.lineTo(offsetX + width, offsetY + width / 2);
@@ -405,6 +406,20 @@ const Board = ({ height, width, numBombs, type }) => {
                 ctx.font = "16px sans-serif";
                 ctx.fillText("F", offsetX + 4, offsetY + width);
             }
+            ctx.beginPath();
+            ctx.moveTo(offsetX + width / 2, offsetY);
+            ctx.strokeStyle = item.revealed ? "rgba(50, 50, 50, 0.2)" : "black";
+            ctx.lineTo(offsetX + width, offsetY + width / 2);
+            ctx.lineTo(offsetX + width, offsetY + width);
+            ctx.lineTo(offsetX + width / 2, offsetY + width * 1.5);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.strokeStyle = item.revealed ? "rgba(50,50,50, 0.2)" : "white";
+            ctx.moveTo(offsetX + width / 2, offsetY + width * 1.5);
+            ctx.lineTo(offsetX, offsetY + width);
+            ctx.lineTo(offsetX, offsetY + width / 2);
+            ctx.moveTo(offsetX + width / 2, offsetY);
+            ctx.stroke();
         }
 
         const inset = 1;
@@ -450,8 +465,8 @@ const Board = ({ height, width, numBombs, type }) => {
             </div>
             <canvas
                 ref={canvasRef}
-                width={width * 20}
-                height={height * 20}
+                width={width * 20 + (type === "HEX" ? width / 2 : 0)}
+                height={height * 20 + (type === "HEX" ? height / 2 : 0)}
                 className="board"
                 onClick={event => {
                     event.preventDefault();
