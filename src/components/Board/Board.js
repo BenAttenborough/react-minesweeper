@@ -231,7 +231,7 @@ const Board = ({ height, width, numBombs, type }) => {
 
     // console.log("numRevealed", numRevealed)
 
-    let templateCols = ``;
+    let templateCols = "";
 
     switch (type) {
         case "HEX":
@@ -271,51 +271,6 @@ const Board = ({ height, width, numBombs, type }) => {
 
         // Drawing squares
         function drawSquare(width, offSetX, offSetY, item) {
-            const effectiveWidth = width - 2;
-            let content = "";
-            if (item.bomb) {
-                content = "X";
-            } else {
-                content = item.count || "";
-            }
-            ctx.strokeStyle = item.revealed ? "black" : "white";
-            ctx.beginPath();
-            ctx.moveTo(offSetX, offSetY);
-            ctx.lineTo(effectiveWidth + offSetX, offSetY);
-            ctx.stroke();
-            ctx.strokeStyle = item.revealed ? "white" : "black";
-            ctx.beginPath();
-            ctx.moveTo(effectiveWidth + offSetX, offSetY);
-            ctx.lineTo(effectiveWidth + offSetX, effectiveWidth + offSetY);
-            ctx.lineTo(offSetX, effectiveWidth + offSetY);
-            ctx.stroke();
-            ctx.strokeStyle = item.revealed ? "black" : "white";
-            ctx.beginPath();
-            ctx.moveTo(offSetX, effectiveWidth + offSetY);
-            ctx.lineTo(offSetX, offSetY);
-            ctx.stroke();
-            if (item.revealed) {
-                ctx.fillStyle = "black";
-                ctx.font = "16px sans-serif";
-                ctx.fillText(content, offSetX + 4, offSetY + width - 5);
-                if (item.bomb) {
-                    ctx.beginPath();
-                    ctx.strokeStyle = "rgb(1, 1, 1)";
-                    ctx.fillStyle = "red";
-                    ctx.moveTo(offSetX, offSetY);
-                    ctx.lineTo(effectiveWidth + offSetX, offSetY);
-                    ctx.lineTo(
-                        effectiveWidth + offSetX,
-                        effectiveWidth + offSetY
-                    );
-                    ctx.lineTo(offSetX, effectiveWidth + offSetY);
-                    ctx.lineTo(offSetX, offSetY);
-                    ctx.fill();
-                }
-            }
-        }
-
-        function drawBasicSq(width, offSetX, offSetY, item) {
             // console.log('item', item)
             const effectiveWidth = width - 2;
             let content = "";
@@ -350,21 +305,21 @@ const Board = ({ height, width, numBombs, type }) => {
                 }
             }
             ctx.fill();
-            // ctx.beginPath();
-            // ctx.moveTo(offSetX, offSetY);
-            // ctx.lineTo(effectiveWidth + offSetX, offSetY);
-            // ctx.stroke();
-            // ctx.strokeStyle = item.revealed ? "white" : "black";
-            // ctx.beginPath();
-            // ctx.moveTo(effectiveWidth + offSetX, offSetY);
-            // ctx.lineTo(effectiveWidth + offSetX, effectiveWidth + offSetY);
-            // ctx.lineTo(offSetX, effectiveWidth + offSetY);
-            // ctx.stroke();
-            // ctx.strokeStyle = item.revealed ? "black" : "white";
-            // ctx.beginPath();
-            // ctx.moveTo(offSetX, effectiveWidth + offSetY);
-            // ctx.lineTo(offSetX, offSetY);
-            // ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(offSetX, offSetY);
+            ctx.lineTo(effectiveWidth + offSetX, offSetY);
+            ctx.stroke();
+            ctx.strokeStyle = item.revealed ? "white" : "black";
+            ctx.beginPath();
+            ctx.moveTo(effectiveWidth + offSetX, offSetY);
+            ctx.lineTo(effectiveWidth + offSetX, effectiveWidth + offSetY);
+            ctx.lineTo(offSetX, effectiveWidth + offSetY);
+            ctx.stroke();
+            ctx.strokeStyle = item.revealed ? "black" : "white";
+            ctx.beginPath();
+            ctx.moveTo(offSetX, effectiveWidth + offSetY);
+            ctx.lineTo(offSetX, offSetY);
+            ctx.stroke();
 
             if (item.revealed) {
                 ctx.fillStyle = "black";
@@ -387,31 +342,78 @@ const Board = ({ height, width, numBombs, type }) => {
             }
         }
 
-        function drawRow(numSquares, width, offsetX, offsetY, colour) {
-            for (let i = 0; i < numSquares; i++) {
-                drawSquare(width, offsetX + (width + 1) * i, offsetY, colour);
+        function drawHex(fullWidth, offsetX, offsetY, item) {
+            const width = fullWidth - 2;
+            let content = "";
+            if (item.bomb) {
+                content = "X";
+            } else {
+                content = item.count || "";
+            }
+            ctx.fillStyle = item.revealed
+                ? "rgb(182, 182, 182)"
+                : "rgb(152, 152, 152)";
+            ctx.beginPath();
+            ctx.moveTo(offsetX + width / 2, offsetY);
+            ctx.lineTo(offsetX + width, offsetY + width / 2);
+            ctx.lineTo(offsetX + width, offsetY + width);
+            ctx.lineTo(offsetX + width / 2, offsetY + width * 1.5);
+            ctx.lineTo(offsetX, offsetY + width);
+            ctx.lineTo(offsetX, offsetY + width / 2);
+            ctx.closePath();
+            if (clickCords && ctx.isPointInPath(clickCords.x, clickCords.y)) {
+                // ctx.fillStyle = 'green';
+                console.log(`x: ${item.x}, y: ${item.y} clicked`);
+                console.log("data", data);
+                console.log("data[item.x][item.y]", data[item.x][item.y]);
+                const clickedCell = data[item.x][item.y];
+                // clickFn(item.x, item.y)
+                if (!clickedCell.revealed) {
+                    console.log(`x: ${item.x}, y: ${item.y} not revealed`);
+                    setClickCords(null);
+                    clickFn(item.x, item.y);
+                }
+            }
+            ctx.fill();
+            if (item.revealed) {
+                ctx.fillStyle = "black";
+                ctx.font = "16px sans-serif";
+                ctx.fillText(content, offsetX + 4, offsetY + width);
+                // if (item.bomb) {
+                //     ctx.beginPath();
+                //     ctx.strokeStyle = "rgb(1, 1, 1)";
+                //     ctx.fillStyle = "red";
+                //     ctx.moveTo(offSetX, offSetY);
+                //     ctx.lineTo(effectiveWidth + offSetX, offSetY);
+                //     ctx.lineTo(
+                //         effectiveWidth + offSetX,
+                //         effectiveWidth + offSetY
+                //     );
+                //     ctx.lineTo(offSetX, effectiveWidth + offSetY);
+                //     ctx.lineTo(offSetX, offSetY);
+                //     ctx.fill();
+                // }
             }
         }
-
-        function drawGrid(rows, cols, width, offsetX, offsetY) {
-            for (let i = 0; i < rows; i++) {
-                drawRow(
-                    cols,
-                    width,
-                    offsetX,
-                    offsetY + (width + 1) * i,
-                    "orange"
-                );
-            }
-        }
-
-        // drawGrid(numRows, numCols, 20, 1, 1)
 
         const inset = 1;
 
-        data.map((rows, y) => {
-            return rows.map((item, x) => {
-                drawBasicSq(20, width * y + inset, width * x + inset, item);
+        data.map((rows, x) => {
+            return rows.map((item, y) => {
+                if (type === "HEX") {
+                    if (y % 2 === 0) {
+                        drawHex(
+                            20,
+                            width * x + inset + width / 2,
+                            width * y + inset,
+                            item
+                        );
+                    } else {
+                        drawHex(20, width * x + inset, width * y + inset, item);
+                    }
+                } else {
+                    drawSquare(20, width * x + inset, width * y + inset, item);
+                }
             });
         });
     });
