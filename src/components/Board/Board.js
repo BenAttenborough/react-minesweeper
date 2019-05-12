@@ -367,7 +367,7 @@ const Board = ({ height, width, numBombs, type }) => {
                     console.log("data", data);
                     console.log("data[item.x][item.y]", data[item.x][item.y]);
                     const clickedCell = data[item.x][item.y];
-                    if (!clickedCell.revealed) {
+                    if (!clickedCell.revealed && !clickedCell.flag) {
                         console.log(`x: ${item.x}, y: ${item.y} not revealed`);
                         setClickCords(null);
                         updateGrid(item.x, item.y);
