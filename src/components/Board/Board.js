@@ -12,6 +12,7 @@ const Board = ({ height, width, numBombs, type }) => {
     const [gameRunning, setGameState] = useState(true);
     const [clickCords, setClickCords] = useState(null);
     const numSquares = height * width;
+    const font = "bold 16px sans-serif";
 
     const inBounds = (x, y) => {
         if (x < 0 || y < 0) {
@@ -114,6 +115,29 @@ const Board = ({ height, width, numBombs, type }) => {
 
     const cells = createBoard();
     const [data, setData] = useState(cells);
+
+    const setNumColour = num => {
+        switch (num) {
+            case 1:
+                return "#0b24fb";
+            case 2:
+                return "#228224";
+            case 3:
+                return "#fc0d1b";
+            case 4:
+                return "#020b79";
+            case 5:
+                return "#86272b";
+            case 6:
+                return "#007b7b";
+            case 7:
+                return "#090002";
+            case 8:
+                return "#7b7b7b";
+            default:
+                return "#000";
+        }
+    };
 
     function cellCheck(x, y) {
         const revealedCells = [];
@@ -398,12 +422,12 @@ const Board = ({ height, width, numBombs, type }) => {
             }
             ctx.fill();
             if (item.revealed) {
-                ctx.fillStyle = "black";
-                ctx.font = "16px sans-serif";
+                ctx.fillStyle = setNumColour(content);
+                ctx.font = font;
                 ctx.fillText(content, offsetX + 4, offsetY + width);
             } else if (item.flag) {
                 ctx.fillStyle = "black";
-                ctx.font = "16px sans-serif";
+                ctx.font = font;
                 ctx.fillText("F", offsetX + 4, offsetY + width);
             }
             ctx.beginPath();

@@ -2,7 +2,7 @@
 
 ## To do
 
-1. Coloured numbers
+1. Show board on loss
 2. Flag symbol
 3. Start GUI
 4. Clock
