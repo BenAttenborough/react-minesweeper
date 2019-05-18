@@ -1,3 +1,13 @@
+# React Minesweeper
+
+## To do
+
+1. Coloured numbers
+2. Flag symbol
+3. Start GUI
+4. Clock
+5. Leaderboard
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

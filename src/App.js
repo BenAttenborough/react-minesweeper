@@ -17,7 +17,7 @@ export default function App() {
                 <Options handleChange={handleChange} gameType={gameType} />
             </div>
             <div style={{ display: "inline-block" }}>
-                <Board width={20} height={20} numBombs={40} type={gameType} />
+                <Board width={20} height={20} numBombs={100} type={gameType} />
             </div>
         </div>
     );
