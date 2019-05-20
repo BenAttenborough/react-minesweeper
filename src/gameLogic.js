@@ -13,7 +13,8 @@ export default function handleCanvasClick(
     canvasRef,
     cellWidth,
     setClickCords,
-    board
+    board,
+    setBoard
 ) {
     console.log("Handling canvas click", event);
     event.preventDefault();
