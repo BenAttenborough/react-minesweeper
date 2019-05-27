@@ -1,51 +1,3 @@
-// function getCursorPosition(canvas, event, cellWidth) {
-//     var rect = canvas.getBoundingClientRect();
-//     var x = event.clientX - rect.left;
-//     var y = event.clientY - rect.top;
-//     // console.log("x: " + x + " y: " + y);
-//     // console.log("x:", Math.floor(x / cellWidth));
-//     // console.log("y:", Math.floor(y / cellWidth));
-//     return { x: Math.floor(x / cellWidth), y: Math.floor(y / cellWidth) };
-// }
-
-// const inBounds = (row, col, width, height) => {
-//     // console.log("width", width);
-//     // console.log("height", height);
-//     if (row < 0 || col < 0) {
-//         return null;
-//     }
-//     if (row > height - 1 || col > width - 1) {
-//         return null;
-//     }
-//     return { row, col };
-// };
-
-// /**
-//  * Returns all the cells adjacent to the cells at the provided co-ordinates.
-//  * Depends on the {type} of grid
-//  *
-//  * @param {Number} row
-//  * @param {Number} col
-//  * @param {Number} width
-//  * @param {Number} height
-//  * @param {String} type
-//  */
-// const getAdjCells = (row, col, width, height, type) => {
-//     // console.log("type >>", type);
-//     // console.log(`row ${row} col ${col}`);
-//     let adjCells = [
-//         inBounds(row - 1, col - 1, width, height),
-//         inBounds(row, col - 1, width, height),
-//         inBounds(row + 1, col - 1, width, height),
-//         inBounds(row - 1, col, width, height),
-//         inBounds(row + 1, col, width, height),
-//         inBounds(row - 1, col + 1, width, height),
-//         inBounds(row, col + 1, width, height),
-//         inBounds(row + 1, col + 1, width, height)
-//     ];
-//     return adjCells.filter(cell => cell !== null);
-// };
-
 function cellCheck(board, row, col) {
     const revealedCells = [];
     function checker(row, col) {
@@ -57,7 +9,7 @@ function cellCheck(board, row, col) {
                 )
             ) {
                 revealedCells.push({ row, col });
-                getAdjCells(row, col).forEach(cell => {
+                cell.adjCells.forEach(cell => {
                     checker(cell.row, cell.col);
                 });
             }

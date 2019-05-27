@@ -128,7 +128,7 @@ function createCells(width, height, bombPositions) {
     for (let row = 0; row < height; row++) {
         for (let col = 0; col < width; col++) {
             const cellNum = row + col + row * (width - 1);
-            // const adjCells = getAdjCells(row, col, width, height, type);
+            const adjCells = getAdjCells(row, col, width, height);
             rowContainer.push({
                 revealed: false,
                 bomb: bombPositions.includes(cellNum),
@@ -136,6 +136,7 @@ function createCells(width, height, bombPositions) {
                 flag: false,
                 row,
                 col,
+                adjCells,
                 shape: new Path2D()
             });
         }
