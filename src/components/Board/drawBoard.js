@@ -8,13 +8,14 @@ export default function drawBoard(
     strokeColours,
     clickCords
 ) {
-    board.map((rows, x) => {
-        return rows.map((item, y) => {
+    // console.log("board", board);
+    board.map((row, rowPos) => {
+        return row.map((item, colPos) => {
             createSquare(
                 canvas,
                 width,
-                width * x,
-                width * y,
+                width * colPos,
+                width * rowPos,
                 fillColour,
                 strokeColours,
                 clickCords,

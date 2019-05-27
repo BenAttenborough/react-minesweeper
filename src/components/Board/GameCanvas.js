@@ -7,9 +7,8 @@ export default function GameCanvas({ board, setBoard }) {
         const canvas = canvasRef.current;
         return canvas.getContext("2d");
     }
-
-    const numCellsWide = board.length;
-    const numCellsHigh = board[0].length;
+    const numCellsWide = board[0].length;
+    const numCellsHigh = board.length;
     const width = 20;
     const fillColour = "lightgrey";
     const strokeColours = ["#000000", "#FFFFFF", "#FFFFFF", "#000000"];

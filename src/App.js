@@ -13,7 +13,7 @@ export default function App() {
         setGameType(event.target.value);
     };
 
-    const board = createBoard(15, 5, 15, "SQUARE");
+    const board = createBoard(15, 5, 15, gameType);
     console.log(board);
     const [gameBoard, setGameBoard] = useState(board);
 
