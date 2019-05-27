@@ -9,59 +9,62 @@
  * @param {Number} width
  * @param {Number} height
  */
-const inBounds = (x, y, width, height) => {
-    if (x < 0 || y < 0) {
+const inBounds = (row, col, width, height) => {
+    // console.log("width", width);
+    // console.log("height", height);
+    if (row < 0 || col < 0) {
         return null;
     }
-    if (x > width - 1 || y > height - 1) {
+    if (row > height - 1 || col > width - 1) {
         return null;
     }
-    return { x, y };
+    return { row, col };
 };
 
 /**
  * Returns all the cells adjacent to the cells at the provided co-ordinates.
  * Depends on the {type} of grid
  *
- * @param {Number} x
- * @param {Number} y
+ * @param {Number} row
+ * @param {Number} col
  * @param {Number} width
  * @param {Number} height
  * @param {String} type
  */
-const getAdjCells = (x, y, width, height, type) => {
-    console.log("type >>", type);
+const getAdjCells = (row, col, width, height, type) => {
+    // console.log("type >>", type);
+    // console.log(`row ${row} col ${col}`);
     let adjCells = [
-        inBounds(x - 1, y - 1, width, height),
-        inBounds(x, y - 1, width, height),
-        inBounds(x + 1, y - 1, width, height),
-        inBounds(x - 1, y, width, height),
-        inBounds(x + 1, y, width, height),
-        inBounds(x - 1, y + 1, width, height),
-        inBounds(x, y + 1, width, height),
-        inBounds(x + 1, y + 1, width, height)
+        inBounds(row - 1, col - 1, width, height),
+        inBounds(row, col - 1, width, height),
+        inBounds(row + 1, col - 1, width, height),
+        inBounds(row - 1, col, width, height),
+        inBounds(row + 1, col, width, height),
+        inBounds(row - 1, col + 1, width, height),
+        inBounds(row, col + 1, width, height),
+        inBounds(row + 1, col + 1, width, height)
     ];
-    if (type === "HEX") {
-        if (y % 2 === 0) {
-            adjCells = [
-                inBounds(x, y - 1, width, height),
-                inBounds(x + 1, y - 1, width, height),
-                inBounds(x - 1, y, width, height),
-                inBounds(x + 1, y, width, height),
-                inBounds(x, y + 1, width, height),
-                inBounds(x + 1, y + 1, width, height)
-            ];
-        } else {
-            adjCells = [
-                inBounds(x - 1, y - 1, width, height),
-                inBounds(x, y - 1, width, height),
-                inBounds(x - 1, y, width, height),
-                inBounds(x + 1, y, width, height),
-                inBounds(x - 1, y + 1, width, height),
-                inBounds(x, y + 1, width, height)
-            ];
-        }
-    }
+    // if (type === "HEX") {
+    //     if (y % 2 === 0) {
+    //         adjCells = [
+    //             inBounds(x, y - 1, width, height),
+    //             inBounds(x + 1, y - 1, width, height),
+    //             inBounds(x - 1, y, width, height),
+    //             inBounds(x + 1, y, width, height),
+    //             inBounds(x, y + 1, width, height),
+    //             inBounds(x + 1, y + 1, width, height)
+    //         ];
+    //     } else {
+    //         adjCells = [
+    //             inBounds(x - 1, y - 1, width, height),
+    //             inBounds(x, y - 1, width, height),
+    //             inBounds(x - 1, y, width, height),
+    //             inBounds(x + 1, y, width, height),
+    //             inBounds(x - 1, y + 1, width, height),
+    //             inBounds(x, y + 1, width, height)
+    //         ];
+    //     }
+    // }
     return adjCells.filter(cell => cell !== null);
 };
 
@@ -73,6 +76,99 @@ const getAdjCells = (x, y, width, height, type) => {
  */
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
+}
+
+/**
+ * Returns arry of numbers
+ *
+ * @param {Number} start
+ * @param {Number} end
+ */
+function getNumbersArray(start, end) {
+    if (end < start) {
+        return [];
+    }
+    if (end === start) {
+        return [start];
+    }
+    const numbers = [];
+    for (start; start <= end; start++) {
+        numbers.push(start);
+    }
+    return numbers;
+}
+
+function getUniqueRandomNumbers(start, end, number) {
+    // console.log("start", start);
+    // console.log("end", end);
+    // console.log("number", number);
+    const numbersArray = getNumbersArray(start, end);
+    if (numbersArray.length === 0) {
+        console.warn("No numbers available to choose from");
+        return numbersArray;
+    }
+    if (numbersArray.length <= number) {
+        console.warn(
+            "You have requested more random numbers than number available"
+        );
+        // Return all numbers
+        return numbersArray;
+    }
+    const randomNumbers = [];
+    for (let i = 0; i < number; i++) {
+        const randomIdx = getRandomInt(numbersArray.length);
+        randomNumbers.push(numbersArray.splice(randomIdx, 1)[0]);
+    }
+    return randomNumbers;
+}
+
+function createCells(width, height, bombPositions) {
+    let cells = [];
+    let rowContainer = [];
+    for (let row = 0; row < height; row++) {
+        for (let col = 0; col < width; col++) {
+            const cellNum = row + col + row * (width - 1);
+            // const adjCells = getAdjCells(row, col, width, height, type);
+            rowContainer.push({
+                revealed: false,
+                bomb: bombPositions.includes(cellNum),
+                cellNum,
+                flag: false,
+                row,
+                col,
+                shape: new Path2D()
+            });
+        }
+        cells.push(rowContainer);
+        rowContainer = [];
+    }
+    return cells;
+}
+
+function countBombsInAdjCells(cellsToCheck, board) {
+    // console.log("cellsToCheck", cellsToCheck);
+    // console.log("board", board);
+    let count = 0;
+    cellsToCheck.forEach(cell => {
+        const cellToCheck = board[cell.row][cell.col];
+        // console.log(`board[${cell.row}][${cell.col}]`, cellToCheck);
+        if (cellToCheck.bomb) {
+            count++;
+        }
+    });
+    return count;
+}
+
+function appendCountToCells(cells, type) {
+    const height = cells.length;
+    const width = cells[0].length;
+    for (let row = 0; row < height; row++) {
+        for (let col = 0; col < width; col++) {
+            const adjCells = getAdjCells(row, col, width, height, type);
+            cells[row][col].count = countBombsInAdjCells(adjCells, cells);
+        }
+    }
+    return cells;
 }
 
 /**
@@ -94,55 +190,10 @@ function getRandomInt(max) {
  */
 export default function createBoard(width, height, numBombs, type) {
     console.log("type", type);
-    let cells = [];
-    let row = [];
     let numCells = width * height;
-    let nums = [];
-    let bombPositions = [];
-
-    for (let i = 0; i < numCells; i++) {
-        nums.push(i);
-    }
-
-    for (let i = 0; i < numBombs; i++) {
-        const randomIdx = getRandomInt(nums.length);
-        bombPositions.push(nums.splice(randomIdx, 1)[0]);
-    }
-
-    for (let x = 0; x < width; x++) {
-        for (let y = 0; y < height; y++) {
-            const cellNum = x + y + x * (width - 1);
-            row.push({
-                revealed: false,
-                bomb: bombPositions.includes(cellNum),
-                cellNum,
-                flag: false,
-                x,
-                y,
-                shape: new Path2D()
-            });
-        }
-        cells.push(row);
-        row = [];
-    }
-    // console.log("cells", cells);
-    // console.log("cells[0]", cells[0]);
-    // console.log("cells[0][0]", cells[0][0]);
-    // console.log("cells[0][1]", cells[0][1]);
-    // console.log("cells[1][0]", cells[1][0]);
-    for (let x = 0; x < height; x++) {
-        for (let y = 0; y < width; y++) {
-            const adjCells = getAdjCells(x, y, width, height, type);
-            let count = 0;
-            adjCells.forEach(cell => {
-                // console.log("CELL >>", cell);
-                if (cells[cell.x][cell.y].bomb) {
-                    count++;
-                }
-            });
-            cells[y][x].count = count;
-        }
-    }
+    let bombPositions = getUniqueRandomNumbers(0, numCells, numBombs);
+    let cells = createCells(width, height, bombPositions);
+    cells = appendCountToCells(cells, type);
     return cells;
 }
 

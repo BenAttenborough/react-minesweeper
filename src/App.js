@@ -7,13 +7,13 @@ import createBoard from "./CreateBoard";
 import GameCanvas from "./components/Board/GameCanvas";
 
 export default function App() {
-    const [gameType, setGameType] = useState("HEX");
+    const [gameType, setGameType] = useState("SQUARE");
 
     const handleChange = event => {
         setGameType(event.target.value);
     };
 
-    const board = createBoard(15, 5, 1, "HEX");
+    const board = createBoard(15, 5, 15, "SQUARE");
     console.log(board);
     const [gameBoard, setGameBoard] = useState(board);
 
