@@ -8,21 +8,66 @@
 //     return { x: Math.floor(x / cellWidth), y: Math.floor(y / cellWidth) };
 // }
 
-// function cellCheck(data, x, y) {
-//     let revealedCells = [];
-//     let cell = data[x][y];
-//     if (cell.count === 0) {
-//         if (!revealedCells.some(cell => cell.x === x && cell.y === y)) {
-//             revealedCells.push({ x, y });
-//             getAdjCells(x, y).forEach(cell => {
-//                 checker(cell.x, cell.y);
-//             });
-//         }
-//     } else {
-//         revealedCells.push({ x, y });
+// const inBounds = (row, col, width, height) => {
+//     // console.log("width", width);
+//     // console.log("height", height);
+//     if (row < 0 || col < 0) {
+//         return null;
 //     }
-//     return revealedCells;
-// }
+//     if (row > height - 1 || col > width - 1) {
+//         return null;
+//     }
+//     return { row, col };
+// };
+
+// /**
+//  * Returns all the cells adjacent to the cells at the provided co-ordinates.
+//  * Depends on the {type} of grid
+//  *
+//  * @param {Number} row
+//  * @param {Number} col
+//  * @param {Number} width
+//  * @param {Number} height
+//  * @param {String} type
+//  */
+// const getAdjCells = (row, col, width, height, type) => {
+//     // console.log("type >>", type);
+//     // console.log(`row ${row} col ${col}`);
+//     let adjCells = [
+//         inBounds(row - 1, col - 1, width, height),
+//         inBounds(row, col - 1, width, height),
+//         inBounds(row + 1, col - 1, width, height),
+//         inBounds(row - 1, col, width, height),
+//         inBounds(row + 1, col, width, height),
+//         inBounds(row - 1, col + 1, width, height),
+//         inBounds(row, col + 1, width, height),
+//         inBounds(row + 1, col + 1, width, height)
+//     ];
+//     return adjCells.filter(cell => cell !== null);
+// };
+
+function cellCheck(board, row, col) {
+    const revealedCells = [];
+    function checker(row, col) {
+        const cell = board[row][col];
+        if (cell.count === 0) {
+            if (
+                !revealedCells.some(
+                    cell => cell.row === row && cell.col === col
+                )
+            ) {
+                revealedCells.push({ row, col });
+                getAdjCells(row, col).forEach(cell => {
+                    checker(cell.row, cell.col);
+                });
+            }
+        } else {
+            revealedCells.push({ row, col });
+        }
+    }
+    checker(row, col);
+    return revealedCells;
+}
 
 const updateGrid = (data, cell, setBoard) => {
     console.log("data", data);
@@ -44,24 +89,25 @@ const updateGrid = (data, cell, setBoard) => {
         // setData(dataCopy);
         // setGameState(false);
     } else {
-        console.log(`Cell ${cell.x} ${cell.y} would be revealed`);
+        // console.log(`Cell ${cell.x} ${cell.y} would be revealed`);
+        console.log("cellCheck", cellCheck(data, cell.row, cell.col));
         // console.log(`cellCheck(${x},${y})`);
         // console.log(cellCheck(x, y));
-        // const cellsToReveal = cellCheck(x, y);
-        // const dataCopy = data.map((x, xIdx) => {
-        //     return x.map((y, yIdx) => {
-        //         if (
-        //             cellsToReveal.some(
-        //                 cell => cell.y === yIdx && cell.x === xIdx
-        //             )
-        //         ) {
-        //             return Object.assign({}, { ...y, revealed: true });
-        //         } else {
-        //             return Object.assign({}, y);
-        //         }
-        //     });
-        // });
-        // setData(dataCopy);
+        const cellsToReveal = cellCheck(data, cell.row, cell.col);
+        const dataCopy = data.map((x, xIdx) => {
+            return x.map((y, yIdx) => {
+                if (
+                    cellsToReveal.some(
+                        cell => cell.col === yIdx && cell.row === xIdx
+                    )
+                ) {
+                    return Object.assign({}, { ...y, revealed: true });
+                } else {
+                    return Object.assign({}, y);
+                }
+            });
+        });
+        setBoard(dataCopy);
         // const cellsToReveal = cellCheck(x, y);
         // const dataCopy = data.map((row, rowPos) => {
         //     return row.map((item, colPos) => {
