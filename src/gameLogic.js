@@ -8,7 +8,23 @@
 //     return { x: Math.floor(x / cellWidth), y: Math.floor(y / cellWidth) };
 // }
 
-const updateGrid = (data, cell) => {
+// function cellCheck(data, x, y) {
+//     let revealedCells = [];
+//     let cell = data[x][y];
+//     if (cell.count === 0) {
+//         if (!revealedCells.some(cell => cell.x === x && cell.y === y)) {
+//             revealedCells.push({ x, y });
+//             getAdjCells(x, y).forEach(cell => {
+//                 checker(cell.x, cell.y);
+//             });
+//         }
+//     } else {
+//         revealedCells.push({ x, y });
+//     }
+//     return revealedCells;
+// }
+
+const updateGrid = (data, cell, setBoard) => {
     console.log("data", data);
     console.log("cell", cell);
     if (cell.bomb) {
@@ -18,10 +34,13 @@ const updateGrid = (data, cell) => {
                 return Object.assign({}, y);
             });
         });
-        dataCopy[cell.x][cell.y] = Object.assign(
+        dataCopy[cell.row][cell.col] = Object.assign(
             {},
-            { ...dataCopy[cell.x][cell.y], revealed: true }
+            { ...dataCopy[cell.row][cell.col], revealed: true }
         );
+        console.log("dataCopy", dataCopy);
+        setBoard(dataCopy);
+        // setBoard({});
         // setData(dataCopy);
         // setGameState(false);
     } else {
@@ -43,6 +62,22 @@ const updateGrid = (data, cell) => {
         //     });
         // });
         // setData(dataCopy);
+        // const cellsToReveal = cellCheck(x, y);
+        // const dataCopy = data.map((row, rowPos) => {
+        //     return row.map((item, colPos) => {
+        //         if (
+        //             cellsToReveal.some(
+        //                 cell => cell.y === yIdx && cell.x === xIdx
+        //             )
+        //         ) {
+        //             return Object.assign({}, { ...y, revealed: true });
+        //         } else {
+        //             return Object.assign({}, y);
+        //         }
+        //     });
+        // });
+        // console.log("dataCopy", dataCopy);
+        // setBoard(dataCopy);
     }
 };
 
@@ -63,12 +98,12 @@ export default function handleCanvasClick(
     const ctx = canvas.getContext("2d");
     board.forEach(x => {
         x.forEach(cell => {
-            const isInPath = ctx.isPointInPath(cell.shape, rawY, rawX);
-            console.log("CALLED");
+            const isInPath = ctx.isPointInPath(cell.shape, rawX, rawY);
+            // console.log("CALLED");
             if (isInPath) {
-                console.log("In path:", cell);
+                // console.log("In path:", cell);
                 // updateBoard
-                updateGrid(board, cell);
+                updateGrid(board, cell, setBoard);
             }
         });
     });

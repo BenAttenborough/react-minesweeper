@@ -3,6 +3,7 @@ import drawBoard from "./drawBoard";
 import handleCanvasClick from "../../gameLogic";
 
 export default function GameCanvas({ board, setBoard }) {
+    console.log("GameCanvas board", board);
     function createCanvas(canvasRef) {
         const canvas = canvasRef.current;
         return canvas.getContext("2d");
@@ -11,14 +12,23 @@ export default function GameCanvas({ board, setBoard }) {
     const numCellsHigh = board.length;
     const width = 20;
     const fillColour = "lightgrey";
-    const strokeColours = ["#000000", "#FFFFFF", "#FFFFFF", "#000000"];
+    const strokeColours = ["#FFFFFF", "#000000", "#000000", "#FFFFFF"];
+    const revealedStrokeColours = ["#000000", "#FFFFFF", "#FFFFFF", "#000000"];
     let canvasRef = React.useRef(null);
 
     const [clickCords, setClickCords] = useState(null);
 
     useEffect(() => {
         const canvas = createCanvas(canvasRef);
-        drawBoard(canvas, board, width, fillColour, strokeColours, clickCords);
+        drawBoard(
+            canvas,
+            board,
+            width,
+            fillColour,
+            strokeColours,
+            revealedStrokeColours,
+            clickCords
+        );
     });
 
     console.log("clickCords", clickCords);

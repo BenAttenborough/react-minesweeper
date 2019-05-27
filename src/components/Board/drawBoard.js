@@ -6,18 +6,20 @@ export default function drawBoard(
     width,
     fillColour,
     strokeColours,
+    revealedStrokeColours,
     clickCords
 ) {
     // console.log("board", board);
     board.map((row, rowPos) => {
         return row.map((item, colPos) => {
+            // console.log("item", item);
             createSquare(
                 canvas,
                 width,
                 width * colPos,
                 width * rowPos,
                 fillColour,
-                strokeColours,
+                item.revealed ? revealedStrokeColours : strokeColours,
                 clickCords,
                 item
             );
