@@ -94,7 +94,6 @@ function newFilledSquare(
     clickCords,
     item
 ) {
-    // console.log("item.shape", item.shape);
     const thisShape = item.shape;
     const effectiveWidth = width - 2;
     ctx.fillStyle = fillColour;
@@ -104,6 +103,12 @@ function newFilledSquare(
     thisShape.lineTo(offSetX, effectiveWidth + offSetY);
     thisShape.closePath();
     ctx.fill(thisShape);
+    ctx.font = "16px sans-serif";
+    ctx.fillStyle = "black";
+
+    if (item.revealed) {
+        ctx.fillText(item.count, offSetX + 4, offSetY + width - 5);
+    }
 }
 
 export default function createSquare(

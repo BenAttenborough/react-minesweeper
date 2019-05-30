@@ -25,59 +25,45 @@ const updateGrid = (data, cell, setBoard) => {
     console.log("data", data);
     console.log("cell", cell);
     if (cell.bomb) {
-        console.log("BANGG!");
-        const dataCopy = data.map(x => {
-            return x.map(y => {
-                return Object.assign({}, y);
-            });
-        });
-        dataCopy[cell.row][cell.col] = Object.assign(
-            {},
-            { ...dataCopy[cell.row][cell.col], revealed: true }
-        );
-        console.log("dataCopy", dataCopy);
-        setBoard(dataCopy);
-        // setBoard({});
-        // setData(dataCopy);
-        // setGameState(false);
+        handleBomb(data, cell, setBoard);
     } else {
-        // console.log(`Cell ${cell.x} ${cell.y} would be revealed`);
-        console.log("cellCheck", cellCheck(data, cell.row, cell.col));
-        // console.log(`cellCheck(${x},${y})`);
-        // console.log(cellCheck(x, y));
-        const cellsToReveal = cellCheck(data, cell.row, cell.col);
-        const dataCopy = data.map((x, xIdx) => {
-            return x.map((y, yIdx) => {
-                if (
-                    cellsToReveal.some(
-                        cell => cell.col === yIdx && cell.row === xIdx
-                    )
-                ) {
-                    return Object.assign({}, { ...y, revealed: true });
-                } else {
-                    return Object.assign({}, y);
-                }
-            });
-        });
-        setBoard(dataCopy);
-        // const cellsToReveal = cellCheck(x, y);
-        // const dataCopy = data.map((row, rowPos) => {
-        //     return row.map((item, colPos) => {
-        //         if (
-        //             cellsToReveal.some(
-        //                 cell => cell.y === yIdx && cell.x === xIdx
-        //             )
-        //         ) {
-        //             return Object.assign({}, { ...y, revealed: true });
-        //         } else {
-        //             return Object.assign({}, y);
-        //         }
-        //     });
-        // });
-        // console.log("dataCopy", dataCopy);
-        // setBoard(dataCopy);
+        handleNonBomb(data, cell, setBoard);
     }
 };
+
+function handleNonBomb(data, cell, setBoard) {
+    console.log("cellCheck", cellCheck(data, cell.row, cell.col));
+    const cellsToReveal = cellCheck(data, cell.row, cell.col);
+    const dataCopy = data.map((x, xIdx) => {
+        return x.map((y, yIdx) => {
+            if (
+                cellsToReveal.some(
+                    cell => cell.col === yIdx && cell.row === xIdx
+                )
+            ) {
+                return Object.assign({}, { ...y, revealed: true });
+            } else {
+                return Object.assign({}, y);
+            }
+        });
+    });
+    setBoard(dataCopy);
+}
+
+function handleBomb(data, cell, setBoard) {
+    console.log("BANGG!");
+    const dataCopy = data.map(x => {
+        return x.map(y => {
+            return Object.assign({}, y);
+        });
+    });
+    dataCopy[cell.row][cell.col] = Object.assign(
+        {},
+        { ...dataCopy[cell.row][cell.col], revealed: true }
+    );
+    console.log("dataCopy", dataCopy);
+    setBoard(dataCopy);
+}
 
 export default function handleCanvasClick(
     event,
