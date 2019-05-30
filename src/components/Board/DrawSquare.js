@@ -107,7 +107,14 @@ function newFilledSquare(
     ctx.fillStyle = "black";
 
     if (item.revealed) {
-        ctx.fillText(item.count, offSetX + 4, offSetY + width - 5);
+        if (item.bomb) {
+            ctx.fillStyle = "red";
+            ctx.fill(thisShape);
+        } else {
+            if (item.count > 0) {
+                ctx.fillText(item.count, offSetX + 4, offSetY + width - 5);
+            }
+        }
     }
 }
 
