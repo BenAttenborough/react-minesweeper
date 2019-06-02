@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import drawBoard from "./drawBoard";
-import handleCanvasClick from "../../gameLogic";
+import { handleCanvasClick, handleRightClick } from "../../gameLogic";
 
 export default function GameCanvas({ board, setBoard }) {
     console.log("GameCanvas board", board);
@@ -43,6 +43,18 @@ export default function GameCanvas({ board, setBoard }) {
                 onClick={event => {
                     handleCanvasClick(
                         event,
+                        "LEFT",
+                        canvasRef,
+                        width,
+                        setClickCords,
+                        board,
+                        setBoard
+                    );
+                }}
+                onContextMenu={event => {
+                    handleCanvasClick(
+                        event,
+                        "RIGHT",
                         canvasRef,
                         width,
                         setClickCords,

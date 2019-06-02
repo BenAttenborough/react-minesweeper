@@ -65,8 +65,39 @@ function handleBomb(data, setBoard) {
     setBoard(dataCopy);
 }
 
-export default function handleCanvasClick(
+function toggleFlag(cell, data, toggle) {
+    console.log("Toggling flag");
+    console.log("cell >>", cell);
+
+    const dataCopy = data.map((x, xIdx) => {
+        return x.map((y, yIdx) => {
+            // console.log("cell.row", cell.row);
+            // console.log("xIdx", xIdx);
+            // console.log("cell.col", cell.col);
+            // console.log("yIdx", yIdx);
+            if (cell.row === xIdx && cell.col === yIdx) {
+                console.log("MATCH >>>");
+                return Object.assign({}, { ...y, flag: toggle });
+            } else {
+                return Object.assign({}, y);
+            }
+        });
+    });
+    console.log("dataCopy", dataCopy);
+    return dataCopy;
+}
+
+function setFlag(data, cell, setBoard) {
+    // console.log("data", data);
+    console.log("cell", cell);
+    if (!cell.revealed) {
+        setBoard(toggleFlag(cell, data, !cell.flag));
+    }
+}
+
+export function handleCanvasClick(
     event,
+    clickType,
     canvasRef,
     cellWidth,
     setClickCords,
@@ -87,12 +118,14 @@ export default function handleCanvasClick(
             if (isInPath) {
                 // console.log("In path:", cell);
                 // updateBoard
-                updateGrid(board, cell, setBoard);
+                if (clickType === "LEFT") {
+                    updateGrid(board, cell, setBoard);
+                }
+                if (clickType === "RIGHT") {
+                    console.log("Right click");
+                    setFlag(board, cell, setBoard);
+                }
             }
         });
     });
-
-    console.log("rawX:", rawX);
-    console.log("rawY:", rawY);
-    // setClickCords({ x: rawX, y: rawY, clickType: "LEFT" });
 }
