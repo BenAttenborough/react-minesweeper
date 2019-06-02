@@ -115,6 +115,8 @@ function newFilledSquare(
                 ctx.fillText(item.count, offSetX + 4, offSetY + width - 5);
             }
         }
+    } else if (item.flag) {
+        ctx.fillText("F", offSetX + 4, offSetY + width - 5);
     }
 }
 

@@ -118,7 +118,7 @@ export function handleCanvasClick(
             if (isInPath) {
                 // console.log("In path:", cell);
                 // updateBoard
-                if (clickType === "LEFT") {
+                if (clickType === "LEFT" && !cell.flag) {
                     updateGrid(board, cell, setBoard);
                 }
                 if (clickType === "RIGHT") {
