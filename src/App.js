@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 // import Board from "./components/Board/Board";
 // import Options from "./components/Options/Options";
-import createBoard from "./CreateBoard";
+import { createBoard } from "./CreateBoard";
 import GameCanvas from "./components/Board/GameCanvas";
 
 export default function App() {

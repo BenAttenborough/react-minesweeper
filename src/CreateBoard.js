@@ -9,9 +9,7 @@
  * @param {Number} width
  * @param {Number} height
  */
-const inBounds = (row, col, width, height) => {
-    // console.log("width", width);
-    // console.log("height", height);
+export function inBounds(row, col, width, height) {
     if (row < 0 || col < 0) {
         return null;
     }
@@ -19,7 +17,7 @@ const inBounds = (row, col, width, height) => {
         return null;
     }
     return { row, col };
-};
+}
 
 /**
  * Returns all the cells adjacent to the cells at the provided co-ordinates.
@@ -31,7 +29,7 @@ const inBounds = (row, col, width, height) => {
  * @param {Number} height
  * @param {String} type
  */
-const getAdjCells = (row, col, width, height, type) => {
+export function getAdjCells(row, col, width, height, type) {
     // console.log("type >>", type);
     // console.log(`row ${row} col ${col}`);
     let adjCells = [
@@ -44,29 +42,8 @@ const getAdjCells = (row, col, width, height, type) => {
         inBounds(row, col + 1, width, height),
         inBounds(row + 1, col + 1, width, height)
     ];
-    // if (type === "HEX") {
-    //     if (y % 2 === 0) {
-    //         adjCells = [
-    //             inBounds(x, y - 1, width, height),
-    //             inBounds(x + 1, y - 1, width, height),
-    //             inBounds(x - 1, y, width, height),
-    //             inBounds(x + 1, y, width, height),
-    //             inBounds(x, y + 1, width, height),
-    //             inBounds(x + 1, y + 1, width, height)
-    //         ];
-    //     } else {
-    //         adjCells = [
-    //             inBounds(x - 1, y - 1, width, height),
-    //             inBounds(x, y - 1, width, height),
-    //             inBounds(x - 1, y, width, height),
-    //             inBounds(x + 1, y, width, height),
-    //             inBounds(x - 1, y + 1, width, height),
-    //             inBounds(x, y + 1, width, height)
-    //         ];
-    //     }
-    // }
     return adjCells.filter(cell => cell !== null);
-};
+}
 
 /**
  * Returns a random int between 0 and provided int
@@ -84,11 +61,11 @@ function getRandomInt(max) {
  * @param {Number} start
  * @param {Number} end
  */
-function getNumbersArray(start, end) {
-    if (end < start) {
+export function getNumbersArray(start, end) {
+    if (start > end) {
         return [];
     }
-    if (end === start) {
+    if (start === end) {
         return [start];
     }
     const numbers = [];
@@ -98,10 +75,7 @@ function getNumbersArray(start, end) {
     return numbers;
 }
 
-function getUniqueRandomNumbers(start, end, number) {
-    // console.log("start", start);
-    // console.log("end", end);
-    // console.log("number", number);
+export function getUniqueRandomNumbers(start, end, number) {
     const numbersArray = getNumbersArray(start, end);
     if (numbersArray.length === 0) {
         console.warn("No numbers available to choose from");
@@ -122,6 +96,7 @@ function getUniqueRandomNumbers(start, end, number) {
     return randomNumbers;
 }
 
+// Needs test
 function createCells(width, height, bombPositions) {
     let cells = [];
     let rowContainer = [];
@@ -147,8 +122,6 @@ function createCells(width, height, bombPositions) {
 }
 
 function countBombsInAdjCells(cellsToCheck, board) {
-    // console.log("cellsToCheck", cellsToCheck);
-    // console.log("board", board);
     let count = 0;
     cellsToCheck.forEach(cell => {
         const cellToCheck = board[cell.row][cell.col];
@@ -189,7 +162,7 @@ function appendCountToCells(cells, type) {
  * @param {Number} numBombs
  * @param {String} type
  */
-export default function createBoard(width, height, numBombs, type) {
+export function createBoard(width, height, numBombs, type) {
     console.log("type", type);
     let numCells = width * height;
     let bombPositions = getUniqueRandomNumbers(0, numCells, numBombs);
