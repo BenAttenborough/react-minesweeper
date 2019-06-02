@@ -25,7 +25,7 @@ const updateGrid = (data, cell, setBoard) => {
     console.log("data", data);
     console.log("cell", cell);
     if (cell.bomb) {
-        handleBomb(data, cell, setBoard);
+        handleBomb(data, setBoard);
     } else {
         handleNonBomb(data, cell, setBoard);
     }
@@ -50,18 +50,18 @@ function handleNonBomb(data, cell, setBoard) {
     setBoard(dataCopy);
 }
 
-function handleBomb(data, cell, setBoard) {
-    console.log("BANGG!");
-    const dataCopy = data.map(x => {
+/**
+ * Reveal all cells if bomb clicked
+ *
+ * @param {*} data
+ * @param {*} setBoard
+ */
+function handleBomb(data, setBoard) {
+    let dataCopy = data.map(x => {
         return x.map(y => {
-            return Object.assign({}, y);
+            return Object.assign({}, { ...y, revealed: true });
         });
     });
-    dataCopy[cell.row][cell.col] = Object.assign(
-        {},
-        { ...dataCopy[cell.row][cell.col], revealed: true }
-    );
-    console.log("dataCopy", dataCopy);
     setBoard(dataCopy);
 }
 
