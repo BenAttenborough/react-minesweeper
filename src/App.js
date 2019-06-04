@@ -1,17 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 // import Board from "./components/Board/Board";
 import Options from "./components/Options/Options";
 import { createBoard } from "./CreateBoard";
 import GameCanvas from "./components/Board/GameCanvas";
+import InGameUI from "./components/InGameUI/InGameUI";
 
 export default function App() {
-    const [gameType, setGameType] = useState("SQUARE");
-
-    const handleChange = event => {
-        setGameType(event.target.value);
-    };
-
     const [gameRunning, setGameRunning] = useState(false);
 
     const [gameOptions, setGameOptions] = useState({
@@ -32,11 +27,18 @@ export default function App() {
 
     console.log(gameOptions);
 
+    // useEffect(
+
+    // )
+
     return (
         <div className="App">
             <h1>Minesweeper</h1>
             {gameRunning ? (
-                <GameCanvas board={gameBoard} setBoard={setGameBoard} />
+                <div>
+                    <InGameUI />
+                    <GameCanvas board={gameBoard} setBoard={setGameBoard} />
+                </div>
             ) : (
                 <Options
                     setGameOptions={setGameOptions}
