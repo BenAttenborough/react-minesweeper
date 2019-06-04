@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import drawBoard from "./drawBoard";
-import { handleCanvasClick, handleRightClick } from "../../gameLogic";
+import { handleCanvasClick } from "../../gameLogic";
 
 export default function GameCanvas({ board, setBoard }) {
     console.log("GameCanvas board", board);
@@ -16,8 +16,6 @@ export default function GameCanvas({ board, setBoard }) {
     const revealedStrokeColours = ["#000000", "#FFFFFF", "#FFFFFF", "#000000"];
     let canvasRef = React.useRef(null);
 
-    const [clickCords, setClickCords] = useState(null);
-
     useEffect(() => {
         const canvas = createCanvas(canvasRef);
         drawBoard(
@@ -26,12 +24,9 @@ export default function GameCanvas({ board, setBoard }) {
             width,
             fillColour,
             strokeColours,
-            revealedStrokeColours,
-            clickCords
+            revealedStrokeColours
         );
     });
-
-    console.log("clickCords", clickCords);
 
     return (
         <div>
@@ -46,7 +41,6 @@ export default function GameCanvas({ board, setBoard }) {
                         "LEFT",
                         canvasRef,
                         width,
-                        setClickCords,
                         board,
                         setBoard
                     );
@@ -57,7 +51,6 @@ export default function GameCanvas({ board, setBoard }) {
                         "RIGHT",
                         canvasRef,
                         width,
-                        setClickCords,
                         board,
                         setBoard
                     );

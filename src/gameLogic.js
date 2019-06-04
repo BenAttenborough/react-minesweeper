@@ -100,7 +100,6 @@ export function handleCanvasClick(
     clickType,
     canvasRef,
     cellWidth,
-    setClickCords,
     board,
     setBoard
 ) {

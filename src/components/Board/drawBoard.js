@@ -20,7 +20,6 @@ export default function drawBoard(
                 width * rowPos,
                 fillColour,
                 item.revealed ? revealedStrokeColours : strokeColours,
-                clickCords,
                 item
             );
         });
