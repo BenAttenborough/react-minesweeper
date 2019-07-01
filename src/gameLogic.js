@@ -1,3 +1,5 @@
+import { createBoard } from "./CreateBoard";
+
 function cellCheck(board, row, col) {
     const revealedCells = [];
     function checker(row, col) {
@@ -127,4 +129,20 @@ export function handleCanvasClick(
             }
         });
     });
+}
+
+export function resetBoard(gameOptions, setBoard) {
+    const newBoard = createBoard(
+        gameOptions.width,
+        gameOptions.height,
+        gameOptions.numBombs,
+        gameOptions.gameType
+    );
+    setBoard(newBoard);
+}
+
+export function showMenu(setGameRunning) {
+    console.log("Should be showing menu");
+    console.log("setGameRunning", setGameRunning);
+    setGameRunning(false);
 }

@@ -31,13 +31,24 @@ export default function App() {
 
     // )
 
+    console.log("gameRunning?", gameRunning);
+    console.log("gameBoard?", gameBoard);
+
     return (
         <div className="App">
             <h1>Minesweeper</h1>
             {gameRunning ? (
                 <div>
-                    <InGameUI />
-                    <GameCanvas board={gameBoard} setBoard={setGameBoard} />
+                    <InGameUI
+                        gameOptions={gameOptions}
+                        setBoard={setGameBoard}
+                        setGameRunning={setGameRunning}
+                    />
+                    <GameCanvas
+                        board={gameBoard}
+                        setBoard={setGameBoard}
+                        setGameRunning={setGameRunning}
+                    />
                 </div>
             ) : (
                 <Options

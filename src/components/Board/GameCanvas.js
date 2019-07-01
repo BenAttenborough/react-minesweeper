@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import drawBoard from "./drawBoard";
 import { handleCanvasClick } from "../../gameLogic";
 
-export default function GameCanvas({ board, setBoard }) {
+export default function GameCanvas({ board, setBoard, setGameRunning }) {
     console.log("GameCanvas board", board);
     function createCanvas(canvasRef) {
         const canvas = canvasRef.current;
@@ -42,7 +42,8 @@ export default function GameCanvas({ board, setBoard }) {
                         canvasRef,
                         width,
                         board,
-                        setBoard
+                        setBoard,
+                        setGameRunning
                     );
                 }}
                 onContextMenu={event => {
