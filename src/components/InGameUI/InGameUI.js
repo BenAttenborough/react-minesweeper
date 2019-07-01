@@ -18,7 +18,7 @@ export default function InGameUI({ gameOptions, setBoard, setGameRunning }) {
                     showMenu(setGameRunning);
                 }}
             >
-                Menu
+                New Game
             </button>
         </div>
     );
