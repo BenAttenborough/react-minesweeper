@@ -141,8 +141,6 @@ export function resetBoard(gameOptions, setBoard) {
     setBoard(newBoard);
 }
 
-export function showMenu(setGameRunning) {
+export function showMenu() {
     console.log("Should be showing menu");
-    console.log("setGameRunning", setGameRunning);
-    setGameRunning(false);
 }

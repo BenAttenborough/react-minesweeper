@@ -1,8 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { createBoard } from "../../CreateBoard";
 import drawBoard from "./drawBoard";
 import { handleCanvasClick } from "../../gameLogic";
+import InGameUI from "../InGameUI/InGameUI";
 
-export default function GameCanvas({ board, setBoard, setGameRunning }) {
+// export default function GameCanvas({ board, setBoard, setGameRunning }) {
+export default function GameCanvas({ setGameRunning, gameOptions }) {
+    console.log("gameOptions", gameOptions);
+
+    const gameBoard = createBoard(
+        gameOptions.width,
+        gameOptions.height,
+        gameOptions.numBombs,
+        gameOptions.gameType
+    );
+    const [board, setBoard] = useState(gameBoard);
+
     console.log("GameCanvas board", board);
     function createCanvas(canvasRef) {
         const canvas = canvasRef.current;
@@ -30,6 +43,7 @@ export default function GameCanvas({ board, setBoard, setGameRunning }) {
 
     return (
         <div>
+            <InGameUI gameOptions={gameOptions} setBoard={setBoard} />
             <canvas
                 ref={canvasRef}
                 width={numCellsWide * width}
@@ -59,4 +73,9 @@ export default function GameCanvas({ board, setBoard, setGameRunning }) {
             />
         </div>
     );
+    // return (
+    //     <div>
+    //         <p>Board</p>
+    //     </div>
+    // );
 }

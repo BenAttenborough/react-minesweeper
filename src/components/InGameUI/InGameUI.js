@@ -1,7 +1,7 @@
 import React from "react";
 import { resetBoard, showMenu } from "../../gameLogic";
 
-export default function InGameUI({ gameOptions, setBoard, setGameRunning }) {
+export default function InGameUI({ gameOptions, setBoard }) {
     console.log("gameOptions", gameOptions);
     return (
         <div>
@@ -15,7 +15,7 @@ export default function InGameUI({ gameOptions, setBoard, setGameRunning }) {
             </button>
             <button
                 onClick={() => {
-                    showMenu(setGameRunning);
+                    showMenu();
                 }}
             >
                 New Game
