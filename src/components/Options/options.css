@@ -1,6 +1,23 @@
 .panel {
-	border: 2px solid;
-	border-color: white black black white;
-	margin-right: 2rem;
-	padding: 2rem;
+    /* border: 2px solid; */
+    /* border-color: white black black white; */
+    /* margin-right: 2rem; */
+    /* padding: 2rem; */
+}
+
+.optItem {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.optItem label {
+    margin-right: 0.5rem;
+}
+
+.optSubmit {
+    font-size: 1rem;
+    width: 200px;
+    background-color: rgb(66, 147, 253);
+    color: white;
+    margin-top: 1.5rem;
 }

@@ -52,7 +52,24 @@ function drawSquare(
 
 function drawFromContext(item, ctx, thisShape, offSetX, offSetY, width) {
     ctx.font = "16px sans-serif";
-    ctx.fillStyle = "black";
+    let fillColour = "black";
+    switch (item.count) {
+        case 1:
+            fillColour = "green";
+            break;
+        case 2:
+            fillColour = "blue";
+            break;
+        case 3:
+            fillColour = "yellow";
+            break;
+        case 4:
+            fillColour = "red";
+            break;
+        default:
+            fillColour = "black";
+    }
+    ctx.fillStyle = fillColour;
     if (item.revealed) {
         if (item.bomb) {
             ctx.fillStyle = "red";
@@ -63,6 +80,7 @@ function drawFromContext(item, ctx, thisShape, offSetX, offSetY, width) {
             }
         }
     } else if (item.flag) {
+        ctx.fillStyle = "black";
         ctx.fillText("F", offSetX + 4, offSetY + width - 5);
     }
 }

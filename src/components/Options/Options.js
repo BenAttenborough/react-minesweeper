@@ -25,39 +25,53 @@ export default function({ setGameOptions }) {
     return (
         <div className="panel">
             <form onSubmit={handleSubmit}>
-                <label>Game type:</label>
-                <select
-                    value={gameType}
-                    onChange={event => setGameType(event.target.value)}
-                >
-                    <option value="SQUARE">Square</option>
-                    <option value="HEX">Hex</option>
-                </select>
-                <label>Height:</label>
-                <input
-                    type="number"
-                    name="height"
-                    id="height"
-                    value={height}
-                    onChange={event => setHeight(parseInt(event.target.value))}
-                />
-                <label>Width:</label>
-                <input
-                    type="number"
-                    name="width"
-                    id="width"
-                    value={width}
-                    onChange={event => setWidth(parseInt(event.target.value))}
-                />
-                <label>Number of bombs:</label>
-                <input
-                    type="number"
-                    name="numBombs"
-                    id="numBombs"
-                    value={numBombs}
-                    onChange={event => setNumBombs(event.target.value)}
-                />
-                <input type="submit" value="Submit" />
+                <div className="optItem">
+                    <label>Game type:</label>
+                    <select
+                        value={gameType}
+                        onChange={event => setGameType(event.target.value)}
+                    >
+                        <option value="SQUARE">Square</option>
+                        <option value="HEX">Hex</option>
+                    </select>
+                </div>
+                <div className="optItem">
+                    <label>Height:</label>
+                    <input
+                        type="number"
+                        name="height"
+                        id="height"
+                        value={height}
+                        onChange={event =>
+                            setHeight(parseInt(event.target.value))
+                        }
+                    />
+                </div>
+                <div className="optItem">
+                    <label>Width:</label>
+                    <input
+                        type="number"
+                        name="width"
+                        id="width"
+                        value={width}
+                        onChange={event =>
+                            setWidth(parseInt(event.target.value))
+                        }
+                    />
+                </div>
+                <div className="optItem">
+                    <label>Number of bombs:</label>
+                    <input
+                        type="number"
+                        name="numBombs"
+                        id="numBombs"
+                        value={numBombs}
+                        onChange={event => setNumBombs(event.target.value)}
+                    />
+                </div>
+                <div className="optItem">
+                    <input type="submit" value="Play" className="optSubmit" />
+                </div>
             </form>
         </div>
     );

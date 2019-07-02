@@ -13,13 +13,10 @@ export default function App() {
             {gameOptions ? (
                 <GameCanvas
                     gameOptions={gameOptions}
-                    // setGameRunning={setGameRunning}
+                    setGameOptions={setGameOptions}
                 />
             ) : (
-                <Options
-                    setGameOptions={setGameOptions}
-                    // setGameRunning={setGameRunning}
-                />
+                <Options setGameOptions={setGameOptions} />
             )}
         </div>
     );

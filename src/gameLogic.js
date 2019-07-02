@@ -141,6 +141,6 @@ export function resetBoard(gameOptions, setBoard) {
     setBoard(newBoard);
 }
 
-export function showMenu() {
-    console.log("Should be showing menu");
-}
+// export function showMenu() {
+//     console.log("Should be showing menu");
+// }

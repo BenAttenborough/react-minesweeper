@@ -5,8 +5,13 @@ import { handleCanvasClick } from "../../gameLogic";
 import InGameUI from "../InGameUI/InGameUI";
 
 // export default function GameCanvas({ board, setBoard, setGameRunning }) {
-export default function GameCanvas({ setGameRunning, gameOptions }) {
+export default function GameCanvas({
+    setGameRunning,
+    gameOptions,
+    setGameOptions
+}) {
     console.log("gameOptions", gameOptions);
+    console.log("setGameOptions", setGameOptions);
 
     const gameBoard = createBoard(
         gameOptions.width,
@@ -43,7 +48,11 @@ export default function GameCanvas({ setGameRunning, gameOptions }) {
 
     return (
         <div>
-            <InGameUI gameOptions={gameOptions} setBoard={setBoard} />
+            <InGameUI
+                gameOptions={gameOptions}
+                setGameOptions={setGameOptions}
+                setBoard={setBoard}
+            />
             <canvas
                 ref={canvasRef}
                 width={numCellsWide * width}
