@@ -16,7 +16,7 @@ export default function drawBoard(
         return row.map((item, colPos) => {
             console.log("item", item);
             createCell(
-                "SQUARE",
+                "HEX",
                 canvas,
                 width,
                 width * colPos,

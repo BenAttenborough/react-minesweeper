@@ -41,29 +41,21 @@ function drawStrokedSquare(width, ctx, strokeColours, offSetX, offSetY) {
 
 function drawStrokedHex(width, ctx, strokeColours, offSetX, offSetY) {
     const effectiveWidth = width - 2;
-    // Top
+    const sideLength = effectiveWidth / 2;
     ctx.strokeStyle = strokeColours[0];
     ctx.beginPath();
-    ctx.moveTo(offSetX, offSetY);
-    ctx.lineTo(effectiveWidth + offSetX, offSetY);
+    ctx.moveTo(offSetX + sideLength, offSetY);
+    ctx.lineTo(offSetX + effectiveWidth, offSetY + sideLength);
     ctx.stroke();
-    // Right
     ctx.strokeStyle = strokeColours[1];
     ctx.beginPath();
-    ctx.moveTo(effectiveWidth + offSetX, offSetY);
-    ctx.lineTo(effectiveWidth + offSetX, effectiveWidth + offSetY);
+    ctx.lineTo(offSetX + effectiveWidth, offSetY + sideLength * 2);
+    ctx.lineTo(offSetX + sideLength, offSetY + sideLength * 3);
+    ctx.lineTo(offSetX, offSetY + sideLength * 2);
     ctx.stroke();
-    // Bottom
-    ctx.strokeStyle = strokeColours[2];
+    ctx.strokeStyle = strokeColours[0];
     ctx.beginPath();
-    ctx.moveTo(effectiveWidth + offSetX, effectiveWidth + offSetY);
-    ctx.lineTo(offSetX, effectiveWidth + offSetY);
-    ctx.stroke();
-    // Left
-    ctx.strokeStyle = strokeColours[3];
-    ctx.beginPath();
-    ctx.moveTo(offSetX, effectiveWidth + offSetY);
-    ctx.lineTo(offSetX, offSetY);
+    ctx.lineTo(offSetX, offSetY + sideLength);
     ctx.stroke();
 }
 
