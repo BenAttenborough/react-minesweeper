@@ -42,7 +42,9 @@ function drawSquare(
     effectiveWidth
 ) {
     ctx.fillStyle = fillColour;
+    // 0, 0
     thisShape.moveTo(offSetX, offSetY);
+    // 18, 0
     thisShape.lineTo(effectiveWidth + offSetX, offSetY);
     thisShape.lineTo(effectiveWidth + offSetX, effectiveWidth + offSetY);
     thisShape.lineTo(offSetX, effectiveWidth + offSetY);
