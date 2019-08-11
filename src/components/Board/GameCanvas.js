@@ -37,6 +37,7 @@ export default function GameCanvas({
     useEffect(() => {
         const canvas = createCanvas(canvasRef);
         drawBoard(
+            gameOptions.gameType,
             canvas,
             board,
             width,

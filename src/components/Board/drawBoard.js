@@ -2,6 +2,7 @@ import createCell from "./DrawCell";
 // import createHex from "./DrawHex";
 
 export default function drawBoard(
+    type,
     canvas,
     board,
     width,
@@ -15,11 +16,15 @@ export default function drawBoard(
     board.map((row, rowPos) => {
         return row.map((item, colPos) => {
             console.log("item", item);
+            let alternateOffset = 0;
+            if (type === "HEX") {
+                alternateOffset = rowPos % 2 ? width / 2 : 0;
+            }
             createCell(
-                "HEX",
+                type,
                 canvas,
                 width,
-                width * colPos,
+                width * colPos + alternateOffset,
                 width * rowPos,
                 fillColour,
                 item.revealed ? revealedStrokeColours : strokeColours,
@@ -27,20 +32,4 @@ export default function drawBoard(
             );
         });
     });
-
-    // board.map((row, rowPos) => {
-    //     return row.map((item, colPos) => {
-    //         console.log("item", item);
-    //         let alternateOffset = rowPos % 2 ? width / 2 : 0;
-    //         createHex(
-    //             canvas,
-    //             width,
-    //             width * colPos + alternateOffset,
-    //             width * rowPos,
-    //             fillColour,
-    //             item.revealed ? revealedStrokeColours : strokeColours,
-    //             item
-    //         );
-    //     });
-    // });
 }
