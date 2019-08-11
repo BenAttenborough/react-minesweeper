@@ -14,7 +14,7 @@ function filledHex(ctx, width, offSetX, offSetY, fillColour, item) {
     const thisShape = item.shape;
     const effectiveWidth = width - 2;
     drawHex(ctx, fillColour, thisShape, offSetX, offSetY, effectiveWidth);
-    // drawFromContext(item, ctx, thisShape, offSetX, offSetY, width);
+    drawFromContext(item, ctx, thisShape, offSetX, offSetY, width);
 }
 
 function drawHex(ctx, fillColour, thisShape, offSetX, offSetY, effectiveWidth) {
@@ -22,12 +22,6 @@ function drawHex(ctx, fillColour, thisShape, offSetX, offSetY, effectiveWidth) {
     console.log("offSetY", offSetY);
     console.log("effectiveWidth", effectiveWidth);
     thisShape.fillStyle = fillColour;
-
-    // console.log("expect to be 9:", offSetX + effectiveWidth / 2);
-    // console.log("expect to be 18:", effectiveWidth);
-    console.log(
-        `Shape starts at ${offSetX + effectiveWidth / 2} ${effectiveWidth}`
-    );
     const sideLength = effectiveWidth / 2;
 
     thisShape.moveTo(offSetX + sideLength, offSetY);
@@ -37,7 +31,7 @@ function drawHex(ctx, fillColour, thisShape, offSetX, offSetY, effectiveWidth) {
     thisShape.lineTo(offSetX, offSetY + sideLength * 2);
     thisShape.lineTo(offSetX, offSetY + sideLength);
     thisShape.closePath();
-    ctx.stroke(thisShape);
+    ctx.fill(thisShape);
 }
 
 function drawFromContext(item, ctx, thisShape, offSetX, offSetY, width) {
