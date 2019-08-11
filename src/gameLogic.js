@@ -116,8 +116,9 @@ export function handleCanvasClick(
         x.forEach(cell => {
             const isInPath = ctx.isPointInPath(cell.shape, rawX, rawY);
             // console.log("CALLED");
+            // console.log("cell hit >>>>>>>>>>", cell);
             if (isInPath) {
-                // console.log("In path:", cell);
+                console.log("In path:", cell);
                 // updateBoard
                 if (clickType === "LEFT" && !cell.flag) {
                     updateGrid(board, cell, setBoard);

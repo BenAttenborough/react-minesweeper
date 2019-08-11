@@ -42,6 +42,33 @@ export function getAdjCells(row, col, width, height, type) {
         inBounds(row, col + 1, width, height),
         inBounds(row + 1, col + 1, width, height)
     ];
+    // New
+    if (type === "HEX") {
+        if (col % 2 !== 0) {
+            adjCells = [
+                inBounds(row, col - 1, width, height),
+                inBounds(row + 1, col - 1, width, height),
+                inBounds(row - 1, col, width, height),
+                inBounds(row + 1, col, width, height),
+                inBounds(row, col + 1, width, height),
+                inBounds(row + 1, col + 1, width, height)
+            ];
+        } else {
+            adjCells = [
+                inBounds(row - 1, col - 1, width, height),
+                inBounds(row, col - 1, width, height),
+                inBounds(row - 1, col, width, height),
+                inBounds(row + 1, col, width, height),
+                inBounds(row - 1, col + 1, width, height),
+                inBounds(row, col + 1, width, height)
+            ];
+        }
+    }
+    // New
+    // console.log(
+    //     "adjCells.filter(cell => cell !== null)",
+    //     adjCells.filter(cell => cell !== null)
+    // );
     return adjCells.filter(cell => cell !== null);
 }
 
@@ -97,14 +124,14 @@ export function getUniqueRandomNumbers(start, end, number) {
 }
 
 // Needs test
-function createCells(width, height, bombPositions) {
+function createCells(width, height, bombPositions, type) {
     console.log("createCells height", height);
     let cells = [];
     let rowContainer = [];
     for (let row = 0; row < height; row++) {
         for (let col = 0; col < width; col++) {
             const cellNum = row + col + row * (width - 1);
-            const adjCells = getAdjCells(row, col, width, height);
+            const adjCells = getAdjCells(row, col, width, height, type);
             rowContainer.push({
                 revealed: false,
                 bomb: bombPositions.includes(cellNum),
@@ -168,7 +195,7 @@ export function createBoard(width, height, numBombs, type) {
     console.log("height", height);
     let numCells = width * height;
     let bombPositions = getUniqueRandomNumbers(0, numCells, numBombs);
-    let cells = createCells(width, height, bombPositions);
+    let cells = createCells(width, height, bombPositions, type);
     cells = appendCountToCells(cells, type);
     return cells;
 }
