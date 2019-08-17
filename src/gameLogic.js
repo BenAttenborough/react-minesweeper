@@ -24,8 +24,31 @@ function cellCheck(board, row, col) {
 }
 
 const updateGrid = (data, cell, setBoard) => {
+    console.log("Adjacent cells:", cell.adjCells);
+    // const mockReveal = [
+    //     {
+    //         col: 1,
+    //         row: 0
+    //     }
+    // ];
+    // const cellsToReveal = cell.adjCells;
+    // const dataCopy = data.map((x, xIdx) => {
+    //     return x.map((y, yIdx) => {
+    //         if (
+    //             cellsToReveal.some(
+    //                 cell => cell.col === yIdx && cell.row === xIdx
+    //             )
+    //         ) {
+    //             return Object.assign({}, { ...y, revealed: true });
+    //         } else {
+    //             return Object.assign({}, y);
+    //         }
+    //     });
+    // });
+    // setBoard(dataCopy);
+
     // console.log("data", data);
-    console.log("cell", cell);
+    // console.log("cell", cell);
     if (cell.bomb) {
         handleBomb(data, setBoard);
     } else {
@@ -85,13 +108,13 @@ function toggleFlag(cell, data, toggle) {
             }
         });
     });
-    console.log("dataCopy", dataCopy);
+    // console.log("dataCopy", dataCopy);
     return dataCopy;
 }
 
 function setFlag(data, cell, setBoard) {
     // console.log("data", data);
-    console.log("cell", cell);
+    // console.log("cell", cell);
     if (!cell.revealed) {
         setBoard(toggleFlag(cell, data, !cell.flag));
     }

@@ -44,23 +44,25 @@ export function getAdjCells(row, col, width, height, type) {
     ];
     // New
     if (type === "HEX") {
-        if (col % 2 !== 0) {
+        // console.log("Row", row);
+        // console.log("Col - 1", col - 1);
+        if ((row + 1) % 2 !== 0) {
             adjCells = [
-                inBounds(row, col - 1, width, height),
-                inBounds(row + 1, col - 1, width, height),
+                inBounds(row - 1, col - 1, width, height),
                 inBounds(row - 1, col, width, height),
-                inBounds(row + 1, col, width, height),
+                inBounds(row, col - 1, width, height),
                 inBounds(row, col + 1, width, height),
-                inBounds(row + 1, col + 1, width, height)
+                inBounds(row + 1, col - 1, width, height),
+                inBounds(row + 1, col, width, height)
             ];
         } else {
             adjCells = [
-                inBounds(row - 1, col - 1, width, height),
-                inBounds(row, col - 1, width, height),
-                inBounds(row - 1, col, width, height),
-                inBounds(row + 1, col, width, height),
                 inBounds(row - 1, col + 1, width, height),
-                inBounds(row, col + 1, width, height)
+                inBounds(row - 1, col, width, height),
+                inBounds(row, col - 1, width, height),
+                inBounds(row, col + 1, width, height),
+                inBounds(row + 1, col + 1, width, height),
+                inBounds(row + 1, col, width, height)
             ];
         }
     }
@@ -153,7 +155,7 @@ function countBombsInAdjCells(cellsToCheck, board) {
     let count = 0;
     cellsToCheck.forEach(cell => {
         const cellToCheck = board[cell.row][cell.col];
-        console.log(`board[${cell.row}][${cell.col}]`, cellToCheck);
+        // console.log(`board[${cell.row}][${cell.col}]`, cellToCheck);
         if (cellToCheck.bomb) {
             count++;
         }
