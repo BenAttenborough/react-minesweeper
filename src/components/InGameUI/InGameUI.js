@@ -2,7 +2,7 @@ import React from "react";
 import { resetBoard } from "../../gameLogic";
 
 export default function InGameUI({ gameOptions, setGameOptions, setBoard }) {
-    console.log("gameOptions", gameOptions);
+    // console.log("gameOptions", gameOptions);
     return (
         <div>
             <p>Ingame UI</p>

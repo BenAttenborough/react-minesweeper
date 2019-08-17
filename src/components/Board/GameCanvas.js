@@ -10,8 +10,8 @@ export default function GameCanvas({
     gameOptions,
     setGameOptions
 }) {
-    console.log("gameOptions", gameOptions);
-    console.log("setGameOptions", setGameOptions);
+    // console.log("gameOptions", gameOptions);
+    // console.log("setGameOptions", setGameOptions);
 
     const gameBoard = createBoard(
         gameOptions.width,
@@ -21,7 +21,7 @@ export default function GameCanvas({
     );
     const [board, setBoard] = useState(gameBoard);
 
-    console.log("GameCanvas board", board);
+    // console.log("GameCanvas board", board);
     function createCanvas(canvasRef) {
         const canvas = canvasRef.current;
         return canvas.getContext("2d");

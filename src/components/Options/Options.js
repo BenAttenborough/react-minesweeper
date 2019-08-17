@@ -8,7 +8,7 @@ export default function({ setGameOptions }) {
     const [numBombs, setNumBombs] = useState(20);
 
     useEffect(() => {
-        console.log(">>>>>> Options updated >>>>>>");
+        // console.log(">>>>>> Options updated >>>>>>");
     });
 
     function handleSubmit(event) {

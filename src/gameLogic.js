@@ -24,7 +24,7 @@ function cellCheck(board, row, col) {
 }
 
 const updateGrid = (data, cell, setBoard) => {
-    console.log("data", data);
+    // console.log("data", data);
     console.log("cell", cell);
     if (cell.bomb) {
         handleBomb(data, setBoard);
@@ -34,7 +34,7 @@ const updateGrid = (data, cell, setBoard) => {
 };
 
 function handleNonBomb(data, cell, setBoard) {
-    console.log("cellCheck", cellCheck(data, cell.row, cell.col));
+    // console.log("cellCheck", cellCheck(data, cell.row, cell.col));
     const cellsToReveal = cellCheck(data, cell.row, cell.col);
     const dataCopy = data.map((x, xIdx) => {
         return x.map((y, yIdx) => {
@@ -118,13 +118,13 @@ export function handleCanvasClick(
             // console.log("CALLED");
             // console.log("cell hit >>>>>>>>>>", cell);
             if (isInPath) {
-                console.log("In path:", cell);
+                // console.log("In path:", cell);
                 // updateBoard
                 if (clickType === "LEFT" && !cell.flag) {
                     updateGrid(board, cell, setBoard);
                 }
                 if (clickType === "RIGHT") {
-                    console.log("Right click");
+                    // console.log("Right click");
                     setFlag(board, cell, setBoard);
                 }
             }

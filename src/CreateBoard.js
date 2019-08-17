@@ -125,7 +125,7 @@ export function getUniqueRandomNumbers(start, end, number) {
 
 // Needs test
 function createCells(width, height, bombPositions, type) {
-    console.log("createCells height", height);
+    // console.log("createCells height", height);
     let cells = [];
     let rowContainer = [];
     for (let row = 0; row < height; row++) {
@@ -153,7 +153,7 @@ function countBombsInAdjCells(cellsToCheck, board) {
     let count = 0;
     cellsToCheck.forEach(cell => {
         const cellToCheck = board[cell.row][cell.col];
-        // console.log(`board[${cell.row}][${cell.col}]`, cellToCheck);
+        console.log(`board[${cell.row}][${cell.col}]`, cellToCheck);
         if (cellToCheck.bomb) {
             count++;
         }
@@ -191,8 +191,8 @@ function appendCountToCells(cells, type) {
  * @param {String} type
  */
 export function createBoard(width, height, numBombs, type) {
-    console.log("type", type);
-    console.log("height", height);
+    // console.log("type", type);
+    // console.log("height", height);
     let numCells = width * height;
     let bombPositions = getUniqueRandomNumbers(0, numCells, numBombs);
     let cells = createCells(width, height, bombPositions, type);

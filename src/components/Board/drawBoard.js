@@ -18,7 +18,7 @@ export default function drawBoard(
             // console.log("item", item);
             let alternateOffset = 0;
             if (type === "HEX") {
-                alternateOffset = rowPos % 2 ? 0 : width / 2;
+                alternateOffset = rowPos % 2 ? width / 2 : 0;
             }
             createCell(
                 type,
