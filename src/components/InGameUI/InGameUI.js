@@ -1,8 +1,15 @@
 import React from "react";
 import { resetBoard } from "../../gameLogic";
 
-export default function InGameUI({ gameOptions, setGameOptions, setBoard }) {
-    // console.log("gameOptions", gameOptions);
+export default function InGameUI({
+    gameOptions,
+    setGameOptions,
+    setBoard,
+    cellsToReveal
+}) {
+    console.log(">>>>gameOptions", gameOptions);
+    // const [cellsToReveal, setCellsToReveal] = useState(height * width);
+
     return (
         <div className={"inGameUI"}>
             <button
@@ -20,6 +27,7 @@ export default function InGameUI({ gameOptions, setGameOptions, setBoard }) {
             >
                 New Game
             </button>
+            <p>Cells to reveal: {cellsToReveal}</p>
         </div>
     );
 }

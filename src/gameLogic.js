@@ -79,16 +79,16 @@ function handleNonBomb(data, cell, setBoard, numBombs) {
             }
         });
     });
-    let numRevealed = 0;
-    dataCopy.forEach(row => {
-        row.forEach(cell => {
-            if (cell.revealed) {
-                numRevealed++;
-            }
-        });
-    });
-    console.log("Num revealed:", numRevealed);
-    console.log("Cells to reveal:", numBombs - numRevealed);
+    // let numRevealed = 0;
+    // dataCopy.forEach(row => {
+    //     row.forEach(cell => {
+    //         if (cell.revealed) {
+    //             numRevealed++;
+    //         }
+    //     });
+    // });
+    // console.log("Num revealed:", numRevealed);
+    // console.log("Cells to reveal:", numBombs - numRevealed);
     setBoard(dataCopy);
 }
 
@@ -148,8 +148,6 @@ export function handleCanvasClick(
     gameOptions
 ) {
     console.log("Handling canvas click", event);
-    console.log("gameOptions", gameOptions);
-    console.log("gameOptions.numBombs", gameOptions.numBombs);
     event.preventDefault();
     var rect = canvasRef.current.getBoundingClientRect();
     var rawX = event.clientX - rect.left;
@@ -185,7 +183,3 @@ export function resetBoard(gameOptions, setBoard) {
     );
     setBoard(newBoard);
 }
-
-// export function showMenu() {
-//     console.log("Should be showing menu");
-// }

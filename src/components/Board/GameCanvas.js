@@ -47,6 +47,22 @@ export default function GameCanvas({
     const revealedStrokeColours = ["#000000", "#FFFFFF", "#FFFFFF", "#000000"];
     let canvasRef = React.useRef(null);
 
+    const numCells = gameOptions.width * gameOptions.height;
+    let numRevealed = 0;
+    board.forEach(row => {
+        row.forEach(cell => {
+            if (cell.revealed) {
+                numRevealed++;
+            }
+        });
+    });
+    let cellsToReveal = numCells - gameOptions.numBombs - numRevealed;
+    if (cellsToReveal < 1) {
+        cellsToReveal = 0;
+    }
+    console.log(">>>>numRevealed>>>>", numRevealed);
+    console.log("Cells to reveal:", cellsToReveal);
+
     useEffect(() => {
         const canvas = createCanvas(canvasRef);
         drawBoard(
@@ -67,6 +83,7 @@ export default function GameCanvas({
                 gameOptions={gameOptions}
                 setGameOptions={setGameOptions}
                 setBoard={setBoard}
+                cellsToReveal={cellsToReveal}
             />
             <canvas
                 ref={canvasRef}
