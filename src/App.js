@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Options from "./components/Options/Options";
 import GameCanvas from "./components/Board/GameCanvas";

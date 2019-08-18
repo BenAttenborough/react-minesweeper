@@ -71,7 +71,15 @@ function filledCell(type, ctx, width, offSetX, offSetY, fillColour, item) {
         offSetY,
         effectiveWidth
     );
-    drawFromContext(item, ctx, thisShape, offSetX, offSetY, width);
+    let textOffSetY;
+    switch (type) {
+        case "HEX":
+            textOffSetY = offSetY + 3;
+            break;
+        default:
+            textOffSetY = offSetY;
+    }
+    drawFromContext(item, ctx, thisShape, offSetX, textOffSetY, width);
 }
 
 function drawCell(

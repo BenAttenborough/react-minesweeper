@@ -16,8 +16,8 @@ export default function drawBoard(
     // console.log("board[0][0]", board[0][0].shape);
     // console.log("gameOptions>>>>>>>>>>>>>>>", gameOptions);
     const { gameType } = gameOptions;
-    board.map((row, rowPos) => {
-        return row.map((item, colPos) => {
+    board.forEach((row, rowPos) => {
+        return row.forEach((item, colPos) => {
             // console.log("item", item);
             let alternateOffset = 0;
             if (gameType === "HEX") {
