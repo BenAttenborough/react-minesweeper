@@ -12,6 +12,18 @@ export default function GameCanvas({
 }) {
     // console.log("gameOptions", gameOptions);
     // console.log("setGameOptions", setGameOptions);
+    let { gameType } = gameOptions;
+    let canvasWidthOffset = 0;
+    let canvasHeightOffset = 0;
+    switch (gameType) {
+        case "HEX":
+            canvasWidthOffset += gameOptions.width / 2;
+            canvasHeightOffset += gameOptions.height / 3;
+            break;
+        default:
+            canvasWidthOffset = 0;
+            canvasHeightOffset = 0;
+    }
 
     const gameBoard = createBoard(
         gameOptions.width,
@@ -56,8 +68,8 @@ export default function GameCanvas({
             />
             <canvas
                 ref={canvasRef}
-                width={numCellsWide * width}
-                height={numCellsHigh * width}
+                width={numCellsWide * width + canvasWidthOffset}
+                height={numCellsHigh * width + canvasHeightOffset}
                 className="board"
                 onClick={event => {
                     handleCanvasClick(
@@ -83,9 +95,4 @@ export default function GameCanvas({
             />
         </div>
     );
-    // return (
-    //     <div>
-    //         <p>Board</p>
-    //     </div>
-    // );
 }
