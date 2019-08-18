@@ -14,16 +14,17 @@ export default function drawBoard(
 ) {
     // console.log("board", board);
     // console.log("board[0][0]", board[0][0].shape);
-    const { type } = gameOptions;
+    console.log("gameOptions>>>>>>>>>>>>>>>", gameOptions);
+    const { gameType } = gameOptions;
     board.map((row, rowPos) => {
         return row.map((item, colPos) => {
             // console.log("item", item);
             let alternateOffset = 0;
-            if (type === "HEX") {
+            if (gameType === "HEX") {
                 alternateOffset = rowPos % 2 ? width / 2 : 0;
             }
             createCell(
-                type,
+                gameType,
                 canvas,
                 width,
                 width * colPos + alternateOffset,

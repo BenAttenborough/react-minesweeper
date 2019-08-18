@@ -10,7 +10,7 @@ export default function GameCanvas({
     gameOptions,
     setGameOptions
 }) {
-    // console.log("gameOptions>", gameOptions);
+    console.log("gameOptions>", gameOptions);
     // console.log("setGameOptions", setGameOptions);
     let { gameType } = gameOptions;
     let canvasWidthOffset = 0;
@@ -25,6 +25,7 @@ export default function GameCanvas({
             canvasHeightOffset = 0;
     }
 
+    console.log("gameOptions >X>", gameOptions);
     const gameBoard = createBoard(
         gameOptions.width,
         gameOptions.height,
