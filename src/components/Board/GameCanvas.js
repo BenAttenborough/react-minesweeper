@@ -18,7 +18,7 @@ export default function GameCanvas({
     switch (gameType) {
         case "HEX":
             canvasWidthOffset += gameOptions.width / 2;
-            canvasHeightOffset += gameOptions.height / 3;
+            canvasHeightOffset += gameOptions.height / 2;
             break;
         default:
             canvasWidthOffset = 0;
