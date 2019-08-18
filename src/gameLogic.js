@@ -24,7 +24,7 @@ function cellCheck(board, row, col) {
 }
 
 const updateGrid = (data, cell, setBoard, numBombs) => {
-    console.log("Adjacent cells:", cell.adjCells);
+    // console.log("Adjacent cells:", cell.adjCells);
     // console.log("data:", data);
 
     // const numRevealed = data.map(row => {
@@ -108,8 +108,8 @@ function handleBomb(data, setBoard) {
 }
 
 function toggleFlag(cell, data, toggle) {
-    console.log("Toggling flag");
-    console.log("cell >>", cell);
+    // console.log("Toggling flag");
+    // console.log("cell >>", cell);
 
     const dataCopy = data.map((x, xIdx) => {
         return x.map((y, yIdx) => {
@@ -118,7 +118,7 @@ function toggleFlag(cell, data, toggle) {
             // console.log("cell.col", cell.col);
             // console.log("yIdx", yIdx);
             if (cell.row === xIdx && cell.col === yIdx) {
-                console.log("MATCH >>>");
+                // console.log("MATCH >>>");
                 return Object.assign({}, { ...y, flag: toggle });
             } else {
                 return Object.assign({}, y);
@@ -147,7 +147,7 @@ export function handleCanvasClick(
     setGameRunning,
     gameOptions
 ) {
-    console.log("Handling canvas click", event);
+    // console.log("Handling canvas click", event);
     event.preventDefault();
     var rect = canvasRef.current.getBoundingClientRect();
     var rawX = event.clientX - rect.left;

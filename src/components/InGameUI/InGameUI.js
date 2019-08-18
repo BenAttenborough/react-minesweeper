@@ -7,7 +7,7 @@ export default function InGameUI({
     setBoard,
     cellsToReveal
 }) {
-    console.log(">>>>gameOptions", gameOptions);
+    // console.log(">>>>gameOptions", gameOptions);
     // const [cellsToReveal, setCellsToReveal] = useState(height * width);
 
     return (

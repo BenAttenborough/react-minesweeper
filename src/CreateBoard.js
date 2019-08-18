@@ -127,7 +127,7 @@ export function getUniqueRandomNumbers(start, end, number) {
 
 // Needs test
 function createCells(width, height, bombPositions, type) {
-    console.log("createCells type", type);
+    // console.log("createCells type", type);
     let cells = [];
     let rowContainer = [];
     for (let row = 0; row < height; row++) {
@@ -195,7 +195,7 @@ function appendCountToCells(cells, type) {
 export function createBoard(width, height, numBombs, type) {
     // console.log("type", type);
     // console.log("height", height);
-    console.log("type!", type);
+    // console.log("type!", type);
     let numCells = width * height;
     let bombPositions = getUniqueRandomNumbers(0, numCells, numBombs);
     let cells = createCells(width, height, bombPositions, type);

@@ -10,7 +10,7 @@ export default function GameCanvas({
     gameOptions,
     setGameOptions
 }) {
-    console.log("gameOptions>", gameOptions);
+    // console.log("gameOptions>", gameOptions);
     // console.log("setGameOptions", setGameOptions);
     let { gameType } = gameOptions;
     let canvasWidthOffset = 0;
@@ -25,7 +25,7 @@ export default function GameCanvas({
             canvasHeightOffset = 0;
     }
 
-    console.log("gameOptions >X>", gameOptions);
+    // console.log("gameOptions >X>", gameOptions);
     const gameBoard = createBoard(
         gameOptions.width,
         gameOptions.height,
@@ -61,8 +61,8 @@ export default function GameCanvas({
     if (cellsToReveal < 1) {
         cellsToReveal = 0;
     }
-    console.log(">>>>numRevealed>>>>", numRevealed);
-    console.log("Cells to reveal:", cellsToReveal);
+    // console.log(">>>>numRevealed>>>>", numRevealed);
+    // console.log("Cells to reveal :", cellsToReveal);
 
     useEffect(() => {
         const canvas = createCanvas(canvasRef);

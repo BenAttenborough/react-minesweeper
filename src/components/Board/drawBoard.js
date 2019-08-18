@@ -14,7 +14,7 @@ export default function drawBoard(
 ) {
     // console.log("board", board);
     // console.log("board[0][0]", board[0][0].shape);
-    console.log("gameOptions>>>>>>>>>>>>>>>", gameOptions);
+    // console.log("gameOptions>>>>>>>>>>>>>>>", gameOptions);
     const { gameType } = gameOptions;
     board.map((row, rowPos) => {
         return row.map((item, colPos) => {
