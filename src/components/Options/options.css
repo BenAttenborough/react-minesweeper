@@ -18,6 +18,10 @@
     font-size: 1rem;
     width: 200px;
     background-color: rgb(66, 147, 253);
-    color: white;
+    border-color: rgb(66, 147, 253);
+    padding: 0.5rem;
+    font-weight: bold;
+    border-radius: 0.25rem;
+    color: aliceblue;
     margin-top: 1.5rem;
 }

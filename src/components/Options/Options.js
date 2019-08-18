@@ -3,9 +3,9 @@ import "./options.css";
 
 export default function({ setGameOptions }) {
     const [gameType, setGameType] = useState("SQUARE");
-    const [height, setHeight] = useState(5);
+    const [height, setHeight] = useState(15);
     const [width, setWidth] = useState(15);
-    const [numBombs, setNumBombs] = useState(20);
+    const [numBombs, setNumBombs] = useState(50);
 
     useEffect(() => {
         // console.log(">>>>>> Options updated >>>>>>");
