@@ -2,17 +2,19 @@ import createCell from "./DrawCell";
 // import createHex from "./DrawHex";
 
 export default function drawBoard(
-    type,
+    gameOptions,
     canvas,
     board,
     width,
     fillColour,
+    fillColourRevealed,
     strokeColours,
     revealedStrokeColours,
     clickCords
 ) {
     // console.log("board", board);
     // console.log("board[0][0]", board[0][0].shape);
+    const { type } = gameOptions;
     board.map((row, rowPos) => {
         return row.map((item, colPos) => {
             // console.log("item", item);
@@ -26,7 +28,7 @@ export default function drawBoard(
                 width,
                 width * colPos + alternateOffset,
                 width * rowPos,
-                fillColour,
+                item.revealed ? fillColourRevealed : fillColour,
                 item.revealed ? revealedStrokeColours : strokeColours,
                 item
             );

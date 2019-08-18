@@ -10,7 +10,7 @@ export default function GameCanvas({
     gameOptions,
     setGameOptions
 }) {
-    // console.log("gameOptions", gameOptions);
+    // console.log("gameOptions>", gameOptions);
     // console.log("setGameOptions", setGameOptions);
     let { gameType } = gameOptions;
     let canvasWidthOffset = 0;
@@ -41,7 +41,8 @@ export default function GameCanvas({
     const numCellsWide = board[0].length;
     const numCellsHigh = board.length;
     const width = 20;
-    const fillColour = "lightgrey";
+    const fillColour = "darkgray";
+    const fillColourRevealed = "lightgray";
     const strokeColours = ["#FFFFFF", "#000000", "#000000", "#FFFFFF"];
     const revealedStrokeColours = ["#000000", "#FFFFFF", "#FFFFFF", "#000000"];
     let canvasRef = React.useRef(null);
@@ -49,11 +50,12 @@ export default function GameCanvas({
     useEffect(() => {
         const canvas = createCanvas(canvasRef);
         drawBoard(
-            gameOptions.gameType,
+            gameOptions,
             canvas,
             board,
             width,
             fillColour,
+            fillColourRevealed,
             strokeColours,
             revealedStrokeColours
         );
@@ -79,7 +81,8 @@ export default function GameCanvas({
                         width,
                         board,
                         setBoard,
-                        setGameRunning
+                        setGameRunning,
+                        gameOptions
                     );
                 }}
                 onContextMenu={event => {

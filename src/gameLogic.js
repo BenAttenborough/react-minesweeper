@@ -23,8 +23,15 @@ function cellCheck(board, row, col) {
     return revealedCells;
 }
 
-const updateGrid = (data, cell, setBoard) => {
+const updateGrid = (data, cell, setBoard, numBombs) => {
     console.log("Adjacent cells:", cell.adjCells);
+    // console.log("data:", data);
+
+    // const numRevealed = data.map(row => {
+    // 	return row.map(cell => {
+    // 		return
+    // 	})
+    // })
     // const mockReveal = [
     //     {
     //         col: 1,
@@ -52,11 +59,11 @@ const updateGrid = (data, cell, setBoard) => {
     if (cell.bomb) {
         handleBomb(data, setBoard);
     } else {
-        handleNonBomb(data, cell, setBoard);
+        handleNonBomb(data, cell, setBoard, numBombs);
     }
 };
 
-function handleNonBomb(data, cell, setBoard) {
+function handleNonBomb(data, cell, setBoard, numBombs) {
     // console.log("cellCheck", cellCheck(data, cell.row, cell.col));
     const cellsToReveal = cellCheck(data, cell.row, cell.col);
     const dataCopy = data.map((x, xIdx) => {
@@ -72,6 +79,16 @@ function handleNonBomb(data, cell, setBoard) {
             }
         });
     });
+    let numRevealed = 0;
+    dataCopy.forEach(row => {
+        row.forEach(cell => {
+            if (cell.revealed) {
+                numRevealed++;
+            }
+        });
+    });
+    console.log("Num revealed:", numRevealed);
+    console.log("Cells to reveal:", numBombs - numRevealed);
     setBoard(dataCopy);
 }
 
@@ -126,9 +143,13 @@ export function handleCanvasClick(
     canvasRef,
     cellWidth,
     board,
-    setBoard
+    setBoard,
+    setGameRunning,
+    gameOptions
 ) {
     console.log("Handling canvas click", event);
+    console.log("gameOptions", gameOptions);
+    console.log("gameOptions.numBombs", gameOptions.numBombs);
     event.preventDefault();
     var rect = canvasRef.current.getBoundingClientRect();
     var rawX = event.clientX - rect.left;
@@ -144,7 +165,7 @@ export function handleCanvasClick(
                 // console.log("In path:", cell);
                 // updateBoard
                 if (clickType === "LEFT" && !cell.flag) {
-                    updateGrid(board, cell, setBoard);
+                    updateGrid(board, cell, setBoard, gameOptions.numBombs);
                 }
                 if (clickType === "RIGHT") {
                     // console.log("Right click");
