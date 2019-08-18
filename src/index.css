@@ -38,4 +38,8 @@ button {
     padding: 0.5rem;
     border-radius: 0.25rem;
     font-weight: bold;
+    color: aliceblue;
+    background-color: rgb(106, 66, 253);
+    border-color: rgb(106, 66, 253);
+    font-size: 0.8rem;
 }

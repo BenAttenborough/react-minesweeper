@@ -5,18 +5,37 @@
     /* padding: 2rem; */
 }
 
+.optForm {
+    width: auto;
+    display: inline-block;
+}
+
 .optItem {
-    display: block;
+    display: flex;
     margin-bottom: 0.5rem;
+    justify-content: space-between;
 }
 
 .optItem label {
-    margin-right: 0.5rem;
+    margin-right: 1rem;
+    padding: 0.25rem 0;
+}
+
+.optItem input,
+.optItem select {
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    border: none;
+    width: 5rem;
+}
+
+.optItem select {
+    width: 5.5rem;
 }
 
 .optSubmit {
     font-size: 1rem;
-    width: 200px;
+    width: 100%;
     background-color: rgb(106, 66, 253);
     border-color: rgb(106, 66, 253);
     padding: 0.5rem;

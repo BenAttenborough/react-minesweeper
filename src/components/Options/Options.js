@@ -24,7 +24,7 @@ export default function({ setGameOptions }) {
 
     return (
         <div className="panel">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="optForm">
                 <div className="optItem">
                     <label>Game type:</label>
                     <select
@@ -69,7 +69,7 @@ export default function({ setGameOptions }) {
                         onChange={event => setNumBombs(event.target.value)}
                     />
                 </div>
-                <div className="optItem">
+                <div>
                     <input type="submit" value="Play" className="optSubmit" />
                 </div>
             </form>
