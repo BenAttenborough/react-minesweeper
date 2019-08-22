@@ -10,7 +10,7 @@ export default function GameCanvas({
     gameOptions,
     setGameOptions
 }) {
-    // console.log("gameOptions>", gameOptions);
+    console.log("gameOptions>", gameOptions);
     // console.log("setGameOptions", setGameOptions);
     let { gameType } = gameOptions;
     let canvasWidthOffset = 0;
@@ -33,6 +33,7 @@ export default function GameCanvas({
         gameOptions.gameType
     );
     const [board, setBoard] = useState(gameBoard);
+    const [gameState, setGameState] = useState(0);
 
     // console.log("GameCanvas board", board);
     function createCanvas(canvasRef) {
@@ -61,6 +62,7 @@ export default function GameCanvas({
     if (cellsToReveal < 1) {
         cellsToReveal = 0;
     }
+    console.log(">>>>gameOptions>>>>", gameOptions);
     // console.log(">>>>numRevealed>>>>", numRevealed);
     // console.log("Cells to reveal :", cellsToReveal);
 
@@ -100,7 +102,9 @@ export default function GameCanvas({
                         board,
                         setBoard,
                         setGameRunning,
-                        gameOptions
+                        gameOptions,
+                        gameState,
+                        setGameState
                     );
                 }}
                 onContextMenu={event => {

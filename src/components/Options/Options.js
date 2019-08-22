@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./options.css";
 
 export default function({ setGameOptions }) {
@@ -6,10 +6,7 @@ export default function({ setGameOptions }) {
     const [height, setHeight] = useState(15);
     const [width, setWidth] = useState(15);
     const [numBombs, setNumBombs] = useState(50);
-
-    useEffect(() => {
-        // console.log(">>>>>> Options updated >>>>>>");
-    });
+    const [gameWon, setGameWon] = useState(0);
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -17,7 +14,8 @@ export default function({ setGameOptions }) {
             gameType,
             height,
             width,
-            numBombs
+            numBombs,
+            gameWon
         };
         setGameOptions(gameOptions);
     }

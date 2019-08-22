@@ -23,7 +23,14 @@ function cellCheck(board, row, col) {
     return revealedCells;
 }
 
-const updateGrid = (data, cell, setBoard, numBombs) => {
+const updateGrid = (
+    data,
+    cell,
+    setBoard,
+    numBombs,
+    gameState,
+    setGameState
+) => {
     // console.log("Adjacent cells:", cell.adjCells);
     // console.log("data:", data);
 
@@ -79,16 +86,24 @@ function handleNonBomb(data, cell, setBoard, numBombs) {
             }
         });
     });
-    // let numRevealed = 0;
-    // dataCopy.forEach(row => {
-    //     row.forEach(cell => {
-    //         if (cell.revealed) {
-    //             numRevealed++;
-    //         }
-    //     });
-    // });
+    let numRevealed = 0;
+    dataCopy.forEach(row => {
+        row.forEach(cell => {
+            if (cell.revealed) {
+                numRevealed++;
+            }
+        });
+    });
     // console.log("Num revealed:", numRevealed);
-    // console.log("Cells to reveal:", numBombs - numRevealed);
+    // console.log("data", data);
+    const cellsWide = data[0].length;
+    const cellsHigh = data.length;
+    const totalCells = cellsWide * cellsHigh;
+    const cellsToBeRevealed = totalCells - numRevealed - numBombs;
+    if (cellsToBeRevealed === 0) {
+        console.log("You win");
+        setGameState(1);
+    }
     setBoard(dataCopy);
 }
 
@@ -145,9 +160,12 @@ export function handleCanvasClick(
     board,
     setBoard,
     setGameRunning,
-    gameOptions
+    gameOptions,
+    gameState,
+    setGameState
 ) {
     // console.log("Handling canvas click", event);
+    console.log("gameOptions >>>>>>k>>>>>K.>>>>>", gameOptions);
     event.preventDefault();
     var rect = canvasRef.current.getBoundingClientRect();
     var rawX = event.clientX - rect.left;
@@ -163,7 +181,14 @@ export function handleCanvasClick(
                 // console.log("In path:", cell);
                 // updateBoard
                 if (clickType === "LEFT" && !cell.flag) {
-                    updateGrid(board, cell, setBoard, gameOptions.numBombs);
+                    updateGrid(
+                        board,
+                        cell,
+                        setBoard,
+                        gameOptions.numBombs,
+                        gameState,
+                        setGameState
+                    );
                 }
                 if (clickType === "RIGHT") {
                     // console.log("Right click");
